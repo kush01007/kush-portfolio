@@ -4,16 +4,19 @@ export const profile = {
   role: "Frontend & Full-Stack Developer",
   status: "Open to Internship",
   location: "India",
-  education: "B.Tech Student",
+  education: "B.Tech (Pursuing)",
+  experience: "Fresher",
   focus: "Clean Code & Real-World Apps",
 
   shortIntro:
     "B.Tech student who loves building clean, responsive and performant web applications with modern UI and real-world functionality. I enjoy turning ideas into seamless digital experiences.",
 
   about:
-    "I'm Kush, a B.Tech student focused on frontend and full-stack development. I build responsive, user-friendly web applications using modern technologies and clean UI practices. I enjoy solving problems, learning new tools, and creating practical digital products.",
+    "I'm Kush, a B.Tech student and a passionate Full-Stack Web Developer who loves building clean, responsive and user-friendly web applications. I enjoy turning ideas into real-world digital experiences.",
+  aboutGrowth:
+    "I'm constantly learning new technologies and working on projects that challenge me to grow. My goal is to contribute to meaningful projects and build solutions that make a difference.",
 
-  email: "your-email@example.com",
+  email: "kush01007@gmail.com",
   github: "https://github.com/kush01007",
   linkedin: "add-your-linkedin-url",
   resume: "",
@@ -119,22 +122,42 @@ export const aboutCards = [
   },
 ];
 
+export const aboutFocus = [
+  {
+    title: "Clean UI",
+    description: "Readable layouts, proper spacing, and responsive interfaces.",
+    icon: "Smartphone",
+  },
+  {
+    title: "Real-World Apps",
+    description: "Projects with auth, APIs, cart, checkout, dashboards, and deployment.",
+    icon: "Globe2",
+  },
+  {
+    title: "Learning by Building",
+    description: "Improving through projects, bug fixing, GitHub cleanup, and shipping live work.",
+    icon: "Code2",
+  },
+];
+
 export const skills = [
   {
     title: "Frontend",
     icon: "Laptop",
+    description: "Building responsive and interactive user interfaces.",
     items: [
       "HTML",
       "CSS",
       "JavaScript",
       "React.js",
       "Tailwind CSS",
-      "Responsive Design",
+      "Redux",
     ],
   },
   {
     title: "Backend",
     icon: "Database",
+    description: "Creating robust APIs and server-side applications.",
     items: [
       "Node.js",
       "Express.js",
@@ -147,20 +170,40 @@ export const skills = [
   {
     title: "Tools",
     icon: "Wrench",
-    items: ["Git", "GitHub", "VS Code", "Postman", "Vercel", "Netlify"],
+    description: "Developer tools that power my workflow.",
+    items: ["Git", "GitHub", "VS Code", "Postman", "Vercel", "Netlify", "Render"],
   },
   {
     title: "UI / Design",
     icon: "PenTool",
+    description: "Designing clean, modern and user-friendly interfaces.",
     items: [
+      "Figma",
       "UI Principles",
       "Wireframing",
       "Prototyping",
-      "Clean Modern UI",
-      "Layout",
-      "Spacing",
+      "Clean & Modern UI",
     ],
   },
+];
+
+export const coreStack = [
+  { name: "React.js", icon: "React" },
+  { name: "Node.js", icon: "Node" },
+  { name: "Express.js", icon: "Express" },
+  { name: "MongoDB", icon: "MongoDB" },
+  { name: "Vercel", icon: "Vercel" },
+];
+
+export const orbTechnologies = [
+  { name: "React", icon: "React" },
+  { name: "JavaScript", icon: "JavaScript" },
+  { name: "Tailwind", icon: "Tailwind" },
+  { name: "Node", icon: "Node" },
+  { name: "Express", icon: "Express" },
+  { name: "MongoDB", icon: "MongoDB" },
+  { name: "GitHub", icon: "GitHub" },
+  { name: "Vercel", icon: "Vercel" },
 ];
 
 export const projects = [

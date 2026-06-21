@@ -20,7 +20,7 @@ const Hero = () => {
   const email = socials.find((social) => social.label === "Email");
 
   return (
-    <section className="relative overflow-hidden border-b border-white/10 bg-[#05080D] pt-14 sm:pt-16">
+    <section className="relative overflow-hidden bg-[#05080D] pt-14 sm:pt-16">
       {/* Grid background */}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:44px_44px]" />
 
