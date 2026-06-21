@@ -1,8 +1,35 @@
 import { useMemo } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { SiReact } from "react-icons/si";
+import { FaGithub, FaNodeJs } from "react-icons/fa";
+import {
+  SiExpress,
+  SiJavascript,
+  SiMongodb,
+  SiReact,
+  SiTailwindcss,
+  SiVercel,
+} from "react-icons/si";
+import { DoubleSide } from "three";
 import TechOrb from "./TechOrb";
+import { techOrbs } from "../data/portfolioData";
+
+const technologyIcons = {
+  React: SiReact,
+  JavaScript: SiJavascript,
+  Tailwind: SiTailwindcss,
+  Node: FaNodeJs,
+  Express: SiExpress,
+  MongoDB: SiMongodb,
+  GitHub: FaGithub,
+  Vercel: SiVercel,
+};
+
+const orbitRings = [
+  { radius: 2.15, tilt: -0.06, opacity: 0.15 },
+  { radius: 3.15, tilt: 0.055, opacity: 0.11 },
+  { radius: 4.2, tilt: -0.04, opacity: 0.08 },
+];
 
 const StarField = () => {
   const positions = useMemo(() => {
@@ -40,12 +67,19 @@ const StarField = () => {
 };
 
 const BaseScene = () => {
+  const canvasWidth = useThree((state) => state.size.width);
+  const compact = canvasWidth < 640;
+
   return (
     <>
       <color attach="background" args={["#05080D"]} />
       <fog attach="fog" args={["#05080D", 8, 24]} />
 
-      <PerspectiveCamera makeDefault position={[0, 1.1, 8]} fov={42} />
+      <PerspectiveCamera
+        makeDefault
+        position={[0, compact ? 1.5 : 1.2, compact ? 11 : 9.5]}
+        fov={42}
+      />
 
       <ambientLight intensity={0.45} color="#B9C9D9" />
       <pointLight
@@ -62,7 +96,44 @@ const BaseScene = () => {
       />
 
       <StarField />
-      <TechOrb icon={SiReact} label="React" position={[0, 0, 0]} />
+
+      {orbitRings.map((ring) => (
+        <mesh
+          key={ring.radius}
+          rotation={[Math.PI / 2 - ring.tilt, 0, 0]}
+        >
+          <ringGeometry
+            args={[ring.radius - 0.012, ring.radius + 0.012, 160]}
+          />
+          <meshBasicMaterial
+            color="#9DB7D5"
+            transparent
+            opacity={ring.opacity}
+            depthWrite={false}
+            side={DoubleSide}
+          />
+        </mesh>
+      ))}
+
+      {techOrbs.map((technology) => {
+        const Icon = technologyIcons[technology.icon];
+
+        return (
+          <TechOrb
+            key={technology.name}
+            icon={Icon}
+            label={technology.name}
+            position={[0, technology.yOffset, 0]}
+            size={technology.size * (compact ? 0.82 : 1)}
+            rotationSpeed={technology.rotationSpeed}
+            orbitRadius={technology.radius}
+            orbitAngle={technology.startAngle}
+            revolutionSpeed={technology.orbitSpeed}
+            floatAmplitude={technology.floatAmount}
+            orbitTilt={technology.orbitTilt}
+          />
+        );
+      })}
 
       <OrbitControls
         makeDefault

@@ -6,22 +6,41 @@ const TechOrb = ({
   icon: Icon,
   label,
   position = [0, 0, 0],
-  radius = 1,
+  size = 1,
   rotationSpeed = 0.12,
+  orbitRadius = 2.25,
+  orbitAngle = 0,
+  revolutionSpeed = 0.09,
+  floatAmplitude = 0.07,
+  orbitTilt = 0,
 }) => {
+  const groupRef = useRef(null);
   const orbRef = useRef(null);
 
-  useFrame((_, delta) => {
-    if (!orbRef.current) return;
+  useFrame((state, delta) => {
+    if (!groupRef.current || !orbRef.current) return;
+
+    const elapsed = state.clock.elapsedTime;
+    const angle = orbitAngle + elapsed * revolutionSpeed;
+    const orbitDepth = Math.sin(angle) * orbitRadius;
+
+    groupRef.current.position.x =
+      position[0] + Math.cos(angle) * orbitRadius;
+    groupRef.current.position.z =
+      position[2] + orbitDepth * Math.cos(orbitTilt);
+    groupRef.current.position.y =
+      position[1] +
+      orbitDepth * Math.sin(orbitTilt) +
+      Math.sin(elapsed * 0.42 + orbitAngle) * floatAmplitude;
 
     orbRef.current.rotation.y += delta * rotationSpeed;
     orbRef.current.rotation.x += delta * rotationSpeed * 0.28;
   });
 
   return (
-    <group position={position}>
+    <group ref={groupRef} position={position}>
       <mesh ref={orbRef}>
-        <sphereGeometry args={[radius, 36, 36]} />
+        <sphereGeometry args={[size, 32, 32]} />
         <meshPhysicalMaterial
           color="#0B1118"
           emissive="#10283D"
@@ -38,7 +57,7 @@ const TechOrb = ({
         />
 
         <mesh scale={0.985}>
-          <sphereGeometry args={[radius, 18, 18]} />
+          <sphereGeometry args={[size, 16, 16]} />
           <meshBasicMaterial
             color="#9DB7D5"
             wireframe
@@ -51,8 +70,8 @@ const TechOrb = ({
 
       <Html center distanceFactor={7.5} style={{ pointerEvents: "none" }}>
         <div className="flex flex-col items-center text-[#BFDDF8] drop-shadow-[0_0_12px_rgba(157,183,213,0.7)]">
-          <Icon size={48} />
-          <span className="mt-1 text-[10px] font-medium tracking-wide text-white/65">
+          <Icon size={Math.max(23, Math.round(size * 48))} />
+          <span className="mt-1 whitespace-nowrap text-[9px] font-medium tracking-wide text-white/65">
             {label}
           </span>
         </div>
