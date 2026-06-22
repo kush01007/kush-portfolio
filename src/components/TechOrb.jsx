@@ -1,42 +1,8 @@
 import { memo, useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Billboard, Html } from "@react-three/drei";
-import CustomShaderMaterial from "three-custom-shader-material";
-import {
-  AdditiveBlending,
-  BackSide,
-  Color,
-  MeshPhysicalMaterial,
-} from "three";
+import { Billboard, Html, MeshTransmissionMaterial } from "@react-three/drei";
+import { AdditiveBlending, Color } from "three";
 import TechIcon3D from "./TechIcon3D";
-
-const glassVertexShader = `
-  varying vec3 vGlassPosition;
-
-  void main() {
-    vGlassPosition = position;
-  }
-`;
-
-const glassFragmentShader = `
-  varying vec3 vGlassPosition;
-
-  void main() {
-    vec3 glassPoint = normalize(vGlassPosition);
-    float broadBand = sin(glassPoint.x * 8.0 + glassPoint.y * 5.0);
-    float crossBand = sin(glassPoint.z * 11.0 - glassPoint.y * 4.0);
-    float glossVariation = smoothstep(0.24, 0.92, broadBand * crossBand);
-    float fineVariation = sin((glassPoint.x + glassPoint.z) * 24.0) * 0.5 + 0.5;
-
-    csm_Roughness = mix(0.024, 0.115, glossVariation * 0.72 + fineVariation * 0.08);
-    csm_Clearcoat = 1.0;
-    csm_ClearcoatRoughness = mix(0.016, 0.085, glossVariation);
-    csm_Transmission = 0.96;
-    csm_Thickness = 0.62;
-  }
-`;
-
-const glassShaderCacheKey = () => "reference-glass-shell-v1";
 
 const rimVertexShader = `
   varying vec3 vWorldNormal;
@@ -57,9 +23,9 @@ const rimFragmentShader = `
   varying vec3 vViewDirection;
 
   void main() {
-    float fresnel = pow(1.0 - abs(dot(vWorldNormal, vViewDirection)), 3.15);
-    float edge = smoothstep(0.08, 0.95, fresnel);
-    gl_FragColor = vec4(uColor * (0.75 + edge * 0.55), edge * uIntensity);
+    float fresnel = pow(1.0 - abs(dot(vWorldNormal, vViewDirection)), 5.6);
+    float edge = smoothstep(0.18, 0.96, fresnel);
+    gl_FragColor = vec4(uColor * (0.82 + edge * 0.26), edge * uIntensity);
   }
 `;
 
@@ -86,20 +52,25 @@ const TechOrb = ({
 }) => {
   const groupRef = useRef(null);
   const orbRef = useRef(null);
-  const glassMaterialRef = useRef(null);
-  const innerMaterialRef = useRef(null);
   const rimMaterialRef = useRef(null);
   const draggingRef = useRef(false);
   const dragMovedRef = useRef(false);
   const lastPointerRef = useRef({ x: 0, y: 0 });
   const invalidate = useThree((state) => state.invalidate);
   const has3DModel = Boolean(model3D);
-  const sphereSegments = lowDetail ? 28 : 48;
-  const contactSegments = lowDetail ? 28 : 48;
+  const sphereSegments = lowDetail ? 24 : 44;
+  const glassBackground = useMemo(() => new Color("#010407"), []);
   const rimUniforms = useMemo(
     () => ({
-      uColor: { value: new Color("#D8EEFF") },
-      uIntensity: { value: 0.38 },
+      uColor: { value: new Color("#CBE3F5") },
+      uIntensity: { value: 0.29 },
+    }),
+    [],
+  );
+  const innerRimUniforms = useMemo(
+    () => ({
+      uColor: { value: new Color("#7199BC") },
+      uIntensity: { value: 0.13 },
     }),
     [],
   );
@@ -154,71 +125,18 @@ const TechOrb = ({
       (targetScale - groupRef.current.scale.x) * ease;
     groupRef.current.scale.setScalar(nextScale);
 
-    if (glassMaterialRef.current) {
-      const targetGlow = 0.045;
-      const targetOpacity = 0.16;
-
-      glassMaterialRef.current.emissiveIntensity +=
-        (targetGlow - glassMaterialRef.current.emissiveIntensity) * ease;
-      glassMaterialRef.current.opacity +=
-        (targetOpacity - glassMaterialRef.current.opacity) * ease;
-    }
-
-    if (innerMaterialRef.current) {
-      const targetInnerGlow = 0.025;
-      innerMaterialRef.current.emissiveIntensity +=
-        (targetInnerGlow - innerMaterialRef.current.emissiveIntensity) * ease;
-    }
-
     if (rimMaterialRef.current) {
-      const targetRim = 0.36;
+      const targetRim = 0.29;
       const currentRim = rimMaterialRef.current.uniforms.uIntensity.value;
       rimMaterialRef.current.uniforms.uIntensity.value +=
         (targetRim - currentRim) * ease;
     }
+
   });
 
   return (
     <group ref={groupRef} position={position}>
       <group ref={orbRef}>
-        <mesh>
-          <sphereGeometry args={[size * 0.82, sphereSegments, sphereSegments]} />
-          <meshPhysicalMaterial
-            ref={innerMaterialRef}
-            color="#010305"
-            emissive="#06111A"
-            emissiveIntensity={0.025}
-            transparent
-            opacity={0.74}
-            transmission={0.08}
-            thickness={size * 0.45}
-            roughness={0.12}
-            metalness={0.08}
-            clearcoat={0.9}
-            clearcoatRoughness={0.12}
-            side={BackSide}
-            envMapIntensity={0.72}
-            depthWrite={false}
-          />
-        </mesh>
-
-        <mesh>
-          <sphereGeometry args={[size * 0.955, sphereSegments, sphereSegments]} />
-          <meshPhysicalMaterial
-            color="#07121B"
-            transparent
-            opacity={0.055}
-            transmission={0.9}
-            thickness={size * 0.38}
-            ior={1.34}
-            roughness={0.08}
-            metalness={0.01}
-            side={BackSide}
-            envMapIntensity={1.1}
-            depthWrite={false}
-          />
-        </mesh>
-
         <mesh
           onPointerOver={(event) => {
             event.stopPropagation();
@@ -279,33 +197,50 @@ const TechOrb = ({
           }}
         >
           <sphereGeometry args={[size, sphereSegments, sphereSegments]} />
-          <CustomShaderMaterial
-            ref={glassMaterialRef}
-            baseMaterial={MeshPhysicalMaterial}
-            vertexShader={glassVertexShader}
-            fragmentShader={glassFragmentShader}
-            cacheKey={glassShaderCacheKey}
-            color="#E2F1FC"
-            emissive="#071520"
-            emissiveIntensity={0.045}
-            transparent
-            opacity={0.16}
-            transmission={0.96}
-            thickness={size * 0.62}
-            ior={1.46}
-            roughness={0.024}
+          <MeshTransmissionMaterial
+            background={glassBackground}
+            backside={!lowDetail}
+            backsideThickness={size * 0.28}
+            backsideEnvMapIntensity={1.15}
+            samples={lowDetail ? 2 : 3}
+            resolution={lowDetail ? 48 : 72}
+            backsideResolution={lowDetail ? 32 : 56}
+            color="#B8CAD7"
+            transmission={1}
+            thickness={size * 0.46}
+            ior={1.4}
+            roughness={0.035}
+            chromaticAberration={0.004}
+            anisotropicBlur={0.018}
+            distortion={0.006}
+            distortionScale={0.3}
+            temporalDistortion={0}
             metalness={0}
             clearcoat={1}
-            clearcoatRoughness={0.018}
-            attenuationColor="#0A1B29"
-            attenuationDistance={4.8}
-            envMapIntensity={2.05}
+            clearcoatRoughness={0.025}
+            attenuationColor="#263A49"
+            attenuationDistance={1.65}
+            envMapIntensity={1.75}
+            specularIntensity={1}
+            specularColor="#FFFFFF"
             depthWrite={false}
           />
         </mesh>
 
         <mesh>
-          <sphereGeometry args={[size * 1.014, sphereSegments, sphereSegments]} />
+          <sphereGeometry args={[size * 0.992, sphereSegments, sphereSegments]} />
+          <shaderMaterial
+            vertexShader={rimVertexShader}
+            fragmentShader={rimFragmentShader}
+            uniforms={innerRimUniforms}
+            transparent
+            blending={AdditiveBlending}
+            depthWrite={false}
+          />
+        </mesh>
+
+        <mesh>
+          <sphereGeometry args={[size * 1.006, sphereSegments, sphereSegments]} />
           <shaderMaterial
             ref={rimMaterialRef}
             vertexShader={rimVertexShader}
@@ -316,6 +251,20 @@ const TechOrb = ({
             depthWrite={false}
           />
         </mesh>
+
+      </group>
+
+      <group position={[0, -size * 0.965, size * 0.08]}>
+        <mesh renderOrder={4}>
+          <sphereGeometry args={[size * 0.018, 10, 10]} />
+          <meshBasicMaterial color="#8CD3FF" toneMapped={false} />
+        </mesh>
+        <pointLight
+          color="#64B9FA"
+          intensity={0.52}
+          distance={size * 1.4}
+          decay={2}
+        />
       </group>
 
       {has3DModel && (
@@ -332,41 +281,16 @@ const TechOrb = ({
         </Billboard>
       )}
 
-      <group position={[0, -size * 1.015, 0]}>
-        <mesh rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[size * 0.52, contactSegments]} />
-          <meshBasicMaterial
-            color="#69B9F4"
-            transparent
-            opacity={0.04}
-            blending={AdditiveBlending}
-            depthWrite={false}
-          />
-        </mesh>
-        <mesh position={[0, 0.012, 0]}>
-          <sphereGeometry args={[size * 0.028, 12, 12]} />
-          <meshBasicMaterial color="#DDF3FF" toneMapped={false} />
-        </mesh>
-        <pointLight
-          position={[0, 0.1, 0]}
-          color="#79C2F8"
-          intensity={0.42}
-          distance={size * 2.4}
-          decay={2}
-        />
-      </group>
-
       <Html
         center
-        position={[0, -size * 0.46, size * 0.32]}
+        position={[0, -size * 0.58, 0]}
         distanceFactor={7.2}
         style={{ pointerEvents: "none" }}
       >
         <span
-          className="whitespace-nowrap text-[10px] font-medium tracking-wide text-white/90 drop-shadow-[0_1px_5px_rgba(0,0,0,0.95)] transition-all duration-300"
+          className="whitespace-nowrap text-[11px] font-medium tracking-wide text-white drop-shadow-[0_1px_5px_rgba(0,0,0,0.95)] transition-opacity duration-300"
           style={{
-            opacity: isDimmed ? 0.24 : isActive ? 1 : 0.82,
-            transform: `scale(${isActive ? 1.04 : 1})`,
+            opacity: isDimmed ? 0.24 : 1,
           }}
         >
           {label}

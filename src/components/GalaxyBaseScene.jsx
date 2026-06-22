@@ -282,7 +282,7 @@ const BaseScene = ({
   const [draggingOrb, setDraggingOrb] = useState(false);
   const mobile = canvasWidth < 640;
   const tablet = canvasWidth >= 640 && canvasWidth < 1024;
-  const orbScale = mobile ? 0.72 : tablet ? 0.86 : 1;
+  const orbScale = mobile ? 0.69 : tablet ? 0.82 : 0.9;
   const orbitScale = mobile ? 0.68 : tablet ? 0.85 : 1;
   const composition = mobile
     ? sceneCompositions.mobile
@@ -302,22 +302,24 @@ const BaseScene = ({
         far={80}
       />
 
-      <ambientLight intensity={0.24} color="#AFC4D8" />
+      <ambientLight intensity={0.08} color="#AFC4D8" />
       <pointLight
         position={[3.5, 3, 4]}
-        intensity={6.5}
+        intensity={2.35}
         color="#B6D1E8"
-        distance={15}
+        distance={14}
+        decay={2}
       />
       <pointLight
         position={[-3, -1.5, 3]}
-        intensity={3.2}
+        intensity={1.05}
         color="#9DB7D5"
         distance={10}
+        decay={2}
       />
       <pointLight
         position={[0, 1.4, -4.5]}
-        intensity={4.2}
+        intensity={1.45}
         color="#4D9FE3"
         distance={11}
         decay={2}
@@ -326,27 +328,35 @@ const BaseScene = ({
       <Environment resolution={mobile ? 64 : 128}>
         <Lightformer
           form="rect"
-          intensity={3.2}
+          intensity={1.45}
           color="#F4FAFF"
-          position={[0, 4.5, 4]}
+          position={[-0.4, 4.8, 4.2]}
           rotation={[Math.PI / 2, 0, 0]}
-          scale={[6.5, 1.15, 1]}
+          scale={[5.4, 0.46, 1]}
         />
         <Lightformer
           form="rect"
-          intensity={2.7}
+          intensity={1.7}
           color="#E5F3FF"
-          position={[-4, 1.5, 3]}
+          position={[-4.4, 1.25, 3.4]}
           rotation={[0, Math.PI / 3, 0]}
-          scale={[1.2, 5, 1]}
+          scale={[0.38, 4.4, 1]}
         />
         <Lightformer
           form="rect"
-          intensity={1.9}
-          color="#FFFFFF"
-          position={[4, -1, 2]}
+          intensity={1.15}
+          color="#DDEEFF"
+          position={[4.3, -0.8, 2.8]}
           rotation={[0, -Math.PI / 3, 0]}
-          scale={[0.8, 3.5, 1]}
+          scale={[0.3, 2.8, 1]}
+        />
+        <Lightformer
+          form="rect"
+          intensity={0.9}
+          color="#68B7F2"
+          position={[0.25, -3.6, 3.2]}
+          rotation={[-Math.PI / 2.4, 0, 0]}
+          scale={[2.8, 0.22, 1]}
         />
       </Environment>
 
@@ -380,7 +390,6 @@ const BaseScene = ({
 
         {techOrbs.map((technology) => {
           const isActive = activeTech?.name === technology.name;
-          const isDimmed = Boolean(activeTech) && !isActive;
 
           return (
             <TechOrb
@@ -400,7 +409,7 @@ const BaseScene = ({
               motionEnabled={!reducedMotion}
               lowDetail={mobile}
               isActive={isActive}
-              isDimmed={isDimmed}
+              isDimmed={false}
               onHoverChange={(hovered) =>
                 onHoverTech(hovered ? technology : null)
               }
@@ -428,11 +437,11 @@ const BaseScene = ({
 
       <EffectComposer multisampling={0} enableNormalPass={false}>
         <Bloom
-          intensity={mobile ? 0.38 : tablet ? 0.46 : 0.52}
-          luminanceThreshold={0.72}
-          luminanceSmoothing={0.24}
+          intensity={mobile ? 0.2 : tablet ? 0.25 : 0.28}
+          luminanceThreshold={0.88}
+          luminanceSmoothing={0.14}
           mipmapBlur
-          radius={0.48}
+          radius={0.3}
         />
         <Vignette
           eskil={false}
@@ -549,7 +558,7 @@ const GalaxyBaseScene = () => {
             alpha: true,
             powerPreference: "high-performance",
             toneMapping: ACESFilmicToneMapping,
-            toneMappingExposure: 0.9,
+            toneMappingExposure: 0.82,
           }}
           style={{ touchAction: "none" }}
           onPointerMissed={() => {

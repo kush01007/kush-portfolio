@@ -9,10 +9,9 @@ const reactRingRotations = [0, Math.PI / 3, -Math.PI / 3];
 const ReactIcon3D = ({
   size,
   lowDetail = false,
-  isActive = false,
   isDimmed = false,
 }) => {
-  const emissiveIntensity = isActive ? 1.1 : isDimmed ? 0.28 : 0.72;
+  const emissiveIntensity = isDimmed ? 0.28 : 1.1;
   const color = isDimmed ? "#537286" : "#8EDBFF";
 
   return (
@@ -43,6 +42,7 @@ const ReactIcon3D = ({
             opacity={isDimmed ? 0.42 : 1}
             depthTest={false}
             depthWrite={false}
+            toneMapped={false}
           />
         </mesh>
       ))}
@@ -61,6 +61,7 @@ const ReactIcon3D = ({
           opacity={isDimmed ? 0.42 : 1}
           depthTest={false}
           depthWrite={false}
+          toneMapped={false}
         />
       </mesh>
     </group>
@@ -72,7 +73,6 @@ const ExtrudedSvgIcon = ({
   color,
   size,
   lowDetail = false,
-  isActive = false,
   isDimmed = false,
 }) => {
   const svg = useLoader(SVGLoader, src);
@@ -110,7 +110,7 @@ const ExtrudedSvgIcon = ({
 
   useEffect(() => () => geometry.dispose(), [geometry]);
 
-  const emissiveIntensity = isActive ? 0.72 : isDimmed ? 0.12 : 0.4;
+  const emissiveIntensity = isDimmed ? 0.12 : 0.72;
 
   return (
     <group scale={size * 0.86} renderOrder={3}>
@@ -128,6 +128,7 @@ const ExtrudedSvgIcon = ({
           opacity={isDimmed ? 0.42 : 1}
           depthTest={false}
           depthWrite={false}
+          toneMapped={false}
         />
       </mesh>
     </group>
