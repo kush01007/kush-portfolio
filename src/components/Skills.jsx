@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { Component, lazy, Suspense } from "react";
 import {
   ArrowRight,
   Code2,
@@ -25,9 +25,37 @@ import {
   SiVercel,
 } from "react-icons/si";
 import { VscVscode } from "react-icons/vsc";
-import { coreStack, skills } from "../data/portfolioData";
+import { coreStack, skills, techOrbs } from "../data/portfolioData";
 
 const GalaxyBaseScene = lazy(() => import("./GalaxyBaseScene"));
+
+const GalaxyFallback = ({ loading = false }) => (
+  <div
+    className="flex h-[700px] flex-col items-center justify-center rounded-2xl border border-white/10 bg-[#030609] px-5 text-center sm:h-[760px] lg:h-[calc(100svh-3rem)] lg:min-h-[700px] lg:max-h-[880px]"
+    role="status"
+    aria-live="polite"
+  >
+    <p className="text-sm font-medium text-white/80">
+      {loading ? "Loading interactive technology galaxy..." : "3D galaxy unavailable"}
+    </p>
+    <p className="mt-2 text-xs leading-5 text-[#94A3B8]">
+      {techOrbs.map((technology) => technology.displayName || technology.name).join(" / ")}
+    </p>
+  </div>
+);
+
+class GalaxyErrorBoundary extends Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) return <GalaxyFallback />;
+    return this.props.children;
+  }
+}
 
 const categoryIcons = {
   Laptop: Code2,
@@ -172,13 +200,13 @@ const Skills = () => {
           </div>
         </div>
 
-        <Suspense
-          fallback={
-            <div className="mt-5 h-[280px] animate-pulse rounded-xl border border-white/10 bg-[#070C12]/80 lg:h-[380px]" />
-          }
-        >
-          <GalaxyBaseScene />
-        </Suspense>
+        <div className="mt-5">
+          <GalaxyErrorBoundary>
+            <Suspense fallback={<GalaxyFallback loading />}>
+              <GalaxyBaseScene />
+            </Suspense>
+          </GalaxyErrorBoundary>
+        </div>
       </div>
     </section>
   );
