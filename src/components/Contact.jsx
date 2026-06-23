@@ -4,7 +4,7 @@ import { profile } from "../data/portfolioData";
 
 const Contact = () => {
   const email = "kushtech123@gmail.com";
-  const linkedin = "https://www.linkedin.com/in/kush-gupta-b99a90395";
+  const linkedin = "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/";
   const github = profile.github || "https://github.com/kush01007";
 
   const contactLinks = [

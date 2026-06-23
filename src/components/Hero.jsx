@@ -40,31 +40,31 @@ const Hero = () => {
       <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[610px] lg:grid-cols-[0.92fr_1.08fr] lg:px-16 lg:py-12 xl:px-20">
         {/* Left content */}
         <div className="max-w-[525px] lg:-translate-y-4">
-          <div className="mb-5 inline-flex items-center gap-2.5 rounded-lg border border-white/15 bg-white/[0.035] px-3.5 py-2 text-sm font-medium text-white shadow-[0_0_40px_rgba(157,183,213,0.08)]">
+          <div className="mb-7 inline-flex items-center gap-2.5 rounded-lg border border-white/15 bg-white/[0.035] px-3.5 py-2 text-sm font-medium text-white shadow-[0_0_40px_rgba(157,183,213,0.08)]">
             <span className="h-2 w-2 rounded-full bg-[#38BDF8] shadow-[0_0_16px_rgba(56,189,248,0.9)]" />
             {profile.status}
           </div>
 
-          <h1 className="text-[68px] font-black leading-[0.9] tracking-[-0.045em] text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.12)] sm:text-[86px] lg:text-[94px]">
+          <h1 className="text-[76px] font-bold leading-[0.86] tracking-[-0.018em] text-white drop-shadow-[0_4px_0_rgba(157,183,213,0.28)] sm:text-[96px] lg:text-[104px]">
             {profile.name}
           </h1>
 
-          <h2 className="mt-5 text-[22px] font-semibold leading-tight tracking-[-0.035em] text-[#AAB7C8] sm:text-[29px] lg:text-[31px]">
+          <h2 className="mt-6 text-[23px] font-semibold leading-tight tracking-[-0.012em] text-[#AAB7C8] sm:text-[29px] lg:text-[31px]">
             {profile.role}
           </h2>
 
-          <p className="mt-4 max-w-[520px] text-[15px] leading-[1.65] tracking-[-0.005em] text-white/65 sm:text-base">
+          <p className="mt-5 max-w-[520px] text-[15px] leading-[1.55] tracking-[-0.005em] text-white/65 sm:text-[17px]">
             {profile.shortIntro}
           </p>
 
-          <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-[1.18fr_1fr_1fr]">
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-[1.18fr_1fr_1fr]">
             <a
               href="#projects"
-              className="group col-span-2 flex h-12 items-center justify-center gap-3 rounded-md border border-[#9DB7D5]/35 bg-[#0B1118]/70 px-4 text-sm font-medium text-white transition hover:border-[#9DB7D5] hover:bg-[#111827] sm:col-span-1"
+              className="group col-span-2 flex h-14 items-center justify-center gap-3.5 rounded-md border border-[#9DB7D5]/35 bg-[#0B1118]/70 px-4 text-[15px] font-medium text-white transition hover:border-[#9DB7D5] hover:bg-[#111827] sm:col-span-1"
             >
-              View Projects
+              <span className="whitespace-nowrap">View Projects</span>
               <ArrowRight
-                size={17}
+                size={20}
                 className="transition group-hover:translate-x-1"
               />
             </a>
@@ -73,9 +73,9 @@ const Hero = () => {
               href={github.href}
               target="_blank"
               rel="noreferrer"
-              className="flex h-12 items-center justify-center gap-3 rounded-md border border-white/15 bg-white/[0.03] px-4 text-sm font-medium text-white transition hover:border-white/35 hover:bg-white/[0.06]"
+              className="flex h-14 items-center justify-center gap-3.5 rounded-md border border-white/15 bg-white/[0.03] px-4 text-[15px] font-medium text-white transition hover:border-white/35 hover:bg-white/[0.06]"
             >
-              <FaGithub size={17} />
+              <FaGithub size={21} />
               GitHub
             </a>
 
@@ -83,21 +83,21 @@ const Hero = () => {
               href={linkedin.href}
               target="_blank"
               rel="noreferrer"
-              className="flex h-12 items-center justify-center gap-3 rounded-md border border-white/15 bg-white/[0.03] px-4 text-sm font-medium text-white transition hover:border-white/35 hover:bg-white/[0.06]"
+              className="flex h-14 items-center justify-center gap-3.5 rounded-md border border-white/15 bg-white/[0.03] px-4 text-[15px] font-medium text-white transition hover:border-white/35 hover:bg-white/[0.06]"
             >
-              <FaLinkedin size={17} />
+              <FaLinkedin size={20} />
               LinkedIn
             </a>
           </div>
 
-          <div className="mt-7 flex items-center justify-around text-white/55 sm:justify-start sm:gap-8">
+          <div className="mt-8 flex items-center justify-around text-white/55 sm:justify-start sm:gap-11">
             <a
               href={github.href}
               target="_blank"
               rel="noreferrer"
               className="transition hover:text-[#9DB7D5]"
             >
-              <FaGithub size={18} />
+              <FaGithub size={24} />
             </a>
             <a
               href={linkedin.href}
@@ -105,24 +105,24 @@ const Hero = () => {
               rel="noreferrer"
               className="transition hover:text-[#9DB7D5]"
             >
-              <FaLinkedin size={18} />
+              <FaLinkedin size={23} />
             </a>
             <a
               href={email.href}
               className="transition hover:text-[#9DB7D5]"
             >
-              <Mail size={19} />
+              <Mail size={24} />
             </a>
             <a href="#projects" className="transition hover:text-[#9DB7D5]">
-              <Code2 size={20} />
+              <Code2 size={25} />
             </a>
           </div>
         </div>
 
         {/* Right content */}
-        <div className="grid gap-4 lg:grid-cols-[1.16fr_0.84fr]">
+        <div className="grid gap-4 xl:grid-cols-[1.16fr_0.84fr]">
           {/* Selected Work */}
-          <div className="flex flex-col rounded-xl border border-white/12 bg-[#0B1118]/75 p-5 shadow-[0_0_50px_rgba(0,0,0,0.35)] backdrop-blur-xl lg:aspect-[1.08/1]">
+          <div className="flex flex-col rounded-xl border border-white/12 bg-[#0B1118]/75 p-5 shadow-[0_0_50px_rgba(0,0,0,0.35)] backdrop-blur-xl xl:aspect-[1.08/1]">
             <div className="mb-2 flex items-center justify-between">
               <h3 className="text-base font-semibold tracking-[-0.02em] text-white">
                 Selected Work
@@ -137,8 +137,12 @@ const Hero = () => {
                   href={work.live}
                   target="_blank"
                   rel="noreferrer"
-                  className="group grid grid-cols-[48px_1fr_20px] items-center gap-3 px-1 py-3 transition-colors hover:bg-white/[0.015] lg:py-0"
+                  className="group relative grid grid-cols-[48px_1fr_20px] items-center gap-3 px-1 py-3 transition-colors hover:bg-white/[0.015] xl:py-0"
+                  style={{ "--work-index": Number(work.number) - 1 }}
                 >
+                  <span className="pointer-events-none absolute left-0 top-3 h-[calc(100%-24px)] w-px rounded-full bg-[#9DB7D5]/40 opacity-[calc(0.52-var(--work-index)*0.1)] shadow-[0_0_7px_rgba(157,183,213,0.28)]" />
+                  <span className="pointer-events-none absolute left-0 top-3 h-px w-16 bg-gradient-to-r from-[#9DB7D5]/24 to-transparent opacity-[calc(0.42-var(--work-index)*0.08)]" />
+                  <span className="pointer-events-none absolute left-0 top-3 h-[calc(100%-24px)] w-12 bg-[linear-gradient(90deg,rgba(157,183,213,0.035),transparent)] opacity-[calc(0.55-var(--work-index)*0.12)]" />
                   <span className="text-xl font-medium text-white">
                     {work.number}
                   </span>
@@ -162,7 +166,7 @@ const Hero = () => {
           </div>
 
           {/* Stat cards */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:h-full lg:grid-cols-1 lg:grid-rows-2">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:h-full xl:grid-cols-1 xl:grid-rows-2">
             <div className="rounded-xl border border-white/12 bg-[#0B1118]/75 p-4 backdrop-blur-xl lg:p-6">
               <div className="flex h-full items-center gap-3 lg:gap-5">
                 <Layers3
@@ -175,7 +179,7 @@ const Hero = () => {
                   }}
                 />
         <div className="max-w-[525px]">
-                  <h3 className="text-base font-semibold text-white lg:text-xl">
+                  <h3 className="text-base font-semibold text-white lg:text-xl ">
                     {stats[0].title}
                   </h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-white/60 lg:mt-2 lg:text-sm">
@@ -212,7 +216,7 @@ const Hero = () => {
           </div>
 
           {/* Availability */}
-          <div className="rounded-xl border border-white/12 bg-[#0B1118]/75 px-4 py-5 backdrop-blur-xl sm:px-5 lg:col-span-2">
+          <div className="rounded-xl border border-white/12 bg-[#0B1118]/75 px-4 py-5 backdrop-blur-xl sm:px-5 xl:col-span-2">
             <div className="flex items-center justify-between gap-5">
               <div className="flex items-center gap-4">
                 <CalendarDays

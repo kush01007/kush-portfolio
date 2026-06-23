@@ -2,6 +2,7 @@ import featuredProjectImage from "../assets/projects/featuredproj.png";
 import amazonProjectImage from "../assets/projects/amazonhomepage.png";
 import wanderbossProjectImage from "../assets/projects/wanderboss.png";
 import weatherProjectImage from "../assets/projects/weatherapp.png";
+import portfolioPortrait from "../assets/myportfolioimg-cutout.png";
 
 export const profile = {
   name: "Kush",
@@ -12,6 +13,7 @@ export const profile = {
   education: "B.Tech (Pursuing)",
   experience: "Fresher",
   focus: "Clean Code & Real-World Apps",
+  portrait: portfolioPortrait,
 
   shortIntro:
     "B.Tech student who loves building clean, responsive and performant web applications with modern UI and real-world functionality. I enjoy turning ideas into seamless digital experiences.",
@@ -21,9 +23,9 @@ export const profile = {
   aboutGrowth:
     "I'm constantly learning new technologies and working on projects that challenge me to grow. My goal is to contribute to meaningful projects and build solutions that make a difference.",
 
-  email: "kush01007@gmail.com",
+  email: "kushtech123@gmail.com",
   github: "https://github.com/kush01007",
-  linkedin: "add-your-linkedin-url",
+  linkedin: "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/",
   resume: "",
 };
 
@@ -42,12 +44,12 @@ export const socials = [
   },
   {
     label: "LinkedIn",
-    href: "add-your-linkedin-url",
+    href: "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/",
     icon: "Linkedin",
   },
   {
     label: "Email",
-    href: "mailto:your-email@example.com",
+    href: "mailto:kushtech123@gmail.com",
     icon: "Mail",
   },
   {
@@ -83,7 +85,7 @@ export const selectedWork = [
     number: "04",
     title: "Amazon Clone",
     type: "HTML/CSS",
-    live: "https://amazon-homepage-clone-lemon.vercel.app/",
+    live: "https://ecommerce-homepage-clone.vercel.app/",
     github: "https://github.com/kush01007/amazon-homepage-clone.git",
   },
 ];
@@ -439,7 +441,7 @@ export const projects = [
     description:
       "A responsive Amazon homepage clone built using HTML and CSS to practice layout, spacing, navigation, product sections, and frontend structure.",
     tech: ["HTML", "CSS"],
-    live: "https://amazon-homepage-clone-lemon.vercel.app/",
+    live: "https://ecommerce-homepage-clone.vercel.app/",
     github: "https://github.com/kush01007/amazon-homepage-clone.git",
   },
 ];
@@ -479,7 +481,7 @@ export const contact = {
   heading: "Let's build something great together",
   subheading:
     "I'm currently open to internship opportunities and beginner-friendly frontend/full-stack roles.",
-  email: "your-email@example.com",
+  email: "kushtech123@gmail.com",
   github: "https://github.com/kush01007",
-  linkedin: "add-your-linkedin-url",
+  linkedin: "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/",
 };

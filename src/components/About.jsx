@@ -25,6 +25,7 @@ const About = () => {
   ];
 
   const resumeAvailable = Boolean(profile.resume);
+  const portraitImage = profile.portrait || "/about-profile.png";
 
   return (
     <section
@@ -82,17 +83,24 @@ const About = () => {
             </a>
           </div>
 
-          <div className="relative min-h-[430px] overflow-hidden rounded-xl border border-white/10 bg-[#070C12]/80 sm:min-h-[450px] lg:min-h-[450px]">
-            <div className="pointer-events-none absolute left-1/2 top-[38%] h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#24558E]/20 blur-[65px]" />
-            <div className="pointer-events-none absolute left-1/2 top-[38%] h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/10" />
-            <div className="pointer-events-none absolute left-1/2 top-[38%] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/[0.07]" />
-            <div className="pointer-events-none absolute left-1/2 top-[38%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/[0.05]" />
+          <div className="relative min-h-[500px] overflow-hidden rounded-xl border border-white/10 bg-[#070C12]/80 sm:min-h-[590px] lg:min-h-[550px]">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(92,146,210,0.28),transparent_28%),radial-gradient(circle_at_50%_20%,rgba(157,183,213,0.12),transparent_34%),linear-gradient(180deg,rgba(8,14,21,0)_0%,rgba(8,14,21,0)_45%,rgba(8,14,21,0.92)_76%)]" />
+            <div className="pointer-events-none absolute left-1/2 top-[27%] h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#24558E]/25 blur-[70px]" />
+            <div className="pointer-events-none absolute left-1/2 top-[27%] h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/10" />
+            <div className="pointer-events-none absolute left-1/2 top-[27%] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/[0.07]" />
+            <div className="pointer-events-none absolute left-1/2 top-[27%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/[0.05]" />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(157,183,213,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(157,183,213,0.035)_1px,transparent_1px)] bg-[size:34px_34px]" />
             <span className="absolute left-[18%] top-[17%] h-1 w-1 rounded-full bg-[#9DB7D5] shadow-[0_0_10px_2px_rgba(157,183,213,0.75)]" />
             <span className="absolute right-[17%] top-[24%] h-1 w-1 rounded-full bg-[#9DB7D5] shadow-[0_0_10px_2px_rgba(157,183,213,0.75)]" />
 
-            {/* Profile image will be added here later. */}
+            <img
+              src={portraitImage}
+              alt={`${profile.name} portrait`}
+              className="absolute left-1/2 top-5 z-10 h-[235px] w-[min(82%,380px)] -translate-x-1/2 object-contain object-bottom opacity-95 drop-shadow-[0_28px_48px_rgba(0,0,0,0.62)] grayscale saturate-[0.72] contrast-125 brightness-[0.82] sm:top-6 sm:h-[260px] lg:top-6 lg:h-[275px]"
+            />
+            <div className="pointer-events-none absolute inset-x-0 top-[235px] z-20 h-36 bg-gradient-to-b from-transparent via-[#070C12]/35 to-[#070C12] sm:top-[260px] lg:top-[275px]" />
 
-            <div className="absolute inset-x-4 bottom-4 rounded-xl border border-white/10 bg-[#080E15]/95 px-5 py-2 shadow-[0_18px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:inset-x-5 sm:bottom-5 sm:px-6">
+            <div className="absolute inset-x-4 bottom-4 z-30 rounded-xl border border-white/10 bg-[#080E15]/95 px-5 py-2 shadow-[0_18px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:inset-x-5 sm:bottom-5 sm:px-6">
               <div className="divide-y divide-white/10">
                 {profileDetails.map((detail) => {
                   const Icon = detail.icon;
