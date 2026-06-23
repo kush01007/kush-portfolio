@@ -49,12 +49,12 @@ const highlightedArcs = [
 
 const sceneCompositions = {
   mobile: {
-    camera: [6.55, 3.65, 7.35],
+    camera: [6.4, 3.7, 7.8],
     target: [0, -0.28, 0],
     fov: 43,
     rigPosition: [0, 0.08, 0],
     rigRotation: [0, -0.04, 0.015],
-    rigScale: 1.12,
+    rigScale: 1.08,
   },
   tablet: {
     camera: [7.85, 4.8, 8.85],
@@ -679,7 +679,7 @@ const GalaxyBaseScene = () => {
 
   return (
     <div
-      className="relative h-[700px] overflow-hidden rounded-[18px] border border-white/10 bg-[#020508] shadow-[inset_0_1px_0_rgba(255,255,255,0.025),0_28px_100px_rgba(0,0,0,0.35)] sm:h-[760px] sm:rounded-[22px] lg:h-[calc(100svh-3rem)] lg:min-h-[700px] lg:max-h-[880px]"
+      className="relative h-[640px] overflow-hidden rounded-[18px] border border-white/10 bg-[#020508] shadow-[inset_0_1px_0_rgba(255,255,255,0.025),0_28px_100px_rgba(0,0,0,0.35)] sm:h-[740px] sm:rounded-[22px] lg:h-[calc(100svh-3rem)] lg:min-h-[700px] lg:max-h-[880px]"
       role="region"
       aria-labelledby="technology-galaxy-title"
       aria-describedby="technology-galaxy-description"
@@ -758,7 +758,7 @@ const GalaxyBaseScene = () => {
       <div className="absolute inset-x-0 bottom-[86px] top-[250px] sm:bottom-0 sm:top-[260px] lg:inset-0">
         <Canvas
           dpr={compactViewport ? 1 : [1, 1.35]}
-          frameloop={compactViewport ? "demand" : reducedMotion ? "demand" : "always"}
+          frameloop={reducedMotion ? "demand" : "always"}
           performance={{ min: 0.45 }}
           gl={{
             antialias: true,

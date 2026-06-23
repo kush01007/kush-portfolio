@@ -31,7 +31,7 @@ const ProjectImage = ({ project, featured = false }) => {
         className={`h-full w-full rounded-lg ${
           featured
             ? "object-cover bg-[#F8FAFC]"
-            : "object-cover"
+            : "object-contain bg-[#070B10]"
         }`}
       />
     );
@@ -42,7 +42,7 @@ const ProjectImage = ({ project, featured = false }) => {
       className={`flex h-full w-full items-center justify-center rounded-lg border border-[#1F2937]/80 bg-[#070B10] ${
         featured
           ? "min-h-[230px] lg:min-h-[270px]"
-          : "min-h-[180px] sm:min-h-[210px]"
+          : "min-h-[135px] sm:min-h-[150px]"
       }`}
     >
       <div className="text-center">
@@ -156,7 +156,7 @@ const Projects = () => {
 
           <div className="grid gap-6 lg:min-h-[285px] lg:grid-cols-[1.32fr_1fr_0.72fr] lg:items-center xl:grid-cols-[1.45fr_1fr_0.72fr]">
             <div className="overflow-hidden rounded-xl border border-[#1F2937]/80 bg-[#070B10] p-2">
-              <div className="aspect-[1919/900] overflow-hidden rounded-lg bg-[#F8FAFC] ">
+              <div className="aspect-[1919/900] overflow-hidden rounded-lg bg-[#F8FAFC]">
                 <ProjectImage project={featuredProject} featured />
               </div>
             </div>
@@ -237,16 +237,16 @@ const Projects = () => {
             {moreProjects.map((project) => (
               <article
                 key={project.number}
-                className="group h-full rounded-xl border border-[#1F2937]/80 bg-[#080D13]/75 p-2.5 backdrop-blur-xl transition hover:border-[#9DB7D5]/25 hover:bg-[#0B1118]/85 sm:p-3"
+                className="group h-full rounded-xl border border-[#1F2937]/80 bg-[#080D13]/75 p-3 backdrop-blur-xl transition hover:border-[#9DB7D5]/25 hover:bg-[#0B1118]/85"
               >
-                <div className="flex flex-col lg:grid lg:grid-cols-[0.9fr_1.1fr] gap-4">
-                  <div className="overflow-hidden rounded-lg border border-[#1F2937]/80 bg-[#070B10] p-1 order-last lg:order-1">
-                    <div className="aspect-[1919/900] overflow-hidden rounded-md">
+                <div className="flex flex-col gap-4 md:grid md:grid-cols-[0.9fr_1.1fr] md:items-start lg:block">
+                  <div className="mx-auto w-full max-w-[390px] overflow-hidden rounded-lg border border-[#1F2937]/80 bg-[#070B10] p-1.5 sm:max-w-[440px] md:max-w-none lg:max-w-none">
+                    <div className="aspect-[1919/900] overflow-hidden rounded-md bg-[#070B10]">
                       <ProjectImage project={project} />
                     </div>
                   </div>
 
-                  <div className="min-w-0 order-first lg:order-2 lg:mt-3.5">
+                  <div className="min-w-0 lg:mt-3.5">
                     <div className="flex items-start gap-3">
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#1F2937]/90 bg-[#080D13]/90 text-xs font-medium text-white/65">
                         {project.number}

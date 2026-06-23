@@ -32,10 +32,12 @@ const Hero = () => {
       <div className="pointer-events-none absolute left-[-8%] top-[30%] hidden h-[420px] w-[620px] rounded-full border border-white/[0.04] lg:block" />
       <div className="pointer-events-none absolute left-[28%] top-[36%] hidden h-[360px] w-[480px] rounded-full border border-white/[0.035] lg:block" />
 
-      {/* Stars */}
-      <span className="absolute left-[39%] top-[28%] h-1.5 w-1.5 rounded-full bg-[#9DB7D5] shadow-[0_0_18px_4px_rgba(157,183,213,0.75)]" />
-      <span className="absolute left-[43%] top-[34%] h-1 w-1 rounded-full bg-[#9DB7D5] shadow-[0_0_16px_3px_rgba(157,183,213,0.65)]" />
-      <span className="absolute left-[2%] top-[58%] h-1 w-1 rounded-full bg-[#9DB7D5] shadow-[0_0_16px_3px_rgba(157,183,213,0.65)]" />
+      {/* Stars (reuse same three dots; on small screens they move to the badge area) */}
+      <span className="absolute right-[32%] top-[9%] sm:left-[39%] sm:top-[28%] h-1.5 w-1.5 rounded-full bg-[#9DB7D5] shadow-[0_0_18px_4px_rgba(157,183,213,0.75)]" />
+      <span className="absolute right-[18%] top-[17%] sm:left-[43%] sm:top-[34%] h-1 w-1 rounded-full bg-[#9DB7D5] shadow-[0_0_16px_3px_rgba(157,183,213,0.65)]" />
+      <span className="absolute left-[3%] top-[30%] sm:left-[2%] sm:top-[58%] h-1 w-1 rounded-full bg-[#9DB7D5] shadow-[0_0_16px_3px_rgba(157,183,213,0.65)]" />
+
+      {/* (mobile-only repositioning handled by the stars above) */}
 
       <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[610px] lg:grid-cols-[0.92fr_1.08fr] lg:px-16 lg:py-12 xl:px-20">
         {/* Left content */}
