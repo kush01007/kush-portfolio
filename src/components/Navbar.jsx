@@ -1,20 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { navLinks, profile } from "../data/portfolioData";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen((prev) => !prev);
-  };
-
   const closeMenu = () => {
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
   return (
-    <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-[#05080D]/80 backdrop-blur-xl">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-[#05080D]">
       <nav className="mx-auto flex h-14 w-full items-center justify-between px-5 sm:h-16 sm:px-8 lg:px-16 xl:px-20">
         <a href="#" onClick={closeMenu} className="flex items-center gap-4">
           <span className="text-2xl font-semibold tracking-tight text-[#9DB7D5] sm:text-3xl">
@@ -26,7 +34,7 @@ const Navbar = () => {
           </span>
         </a>
 
-        {/* Desktop Links */}
+        {/* Desktop Menu */}
         <div className="hidden items-center gap-11 text-[15px] font-medium text-white/75 md:flex">
           {navLinks.map((link) => (
             <a
@@ -39,55 +47,50 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Button */}
         <button
           type="button"
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          onClick={toggleMenu}
-          className="flex h-10 w-10 items-center justify-center rounded-lg border border-white/10 bg-[#080D13]/80 text-white transition hover:border-[#9DB7D5]/40 md:hidden"
+          aria-expanded={isMenuOpen}
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          className="flex h-11 w-11 items-center justify-center border border-white/15 bg-[#05080D] text-white transition hover:bg-[#0B1118] md:hidden"
         >
           {isMenuOpen ? (
-            <X size={27} strokeWidth={1.8} />
+            <X size={29} strokeWidth={1.8} />
           ) : (
-            <Menu size={29} strokeWidth={1.8} />
+            <Menu size={30} strokeWidth={1.8} />
           )}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden ${
-          isMenuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        } transition-opacity duration-200`}
-      >
-        <div
-          onClick={closeMenu}
-          className="fixed inset-0 top-14 bg-black/45 backdrop-blur-sm sm:top-16"
-        />
+      {/* Mobile Menu + Outside Click Backdrop */}
+      {isMenuOpen && (
+        <div className="fixed inset-x-0 bottom-0 top-14 z-40 md:hidden sm:top-16">
+          {/* Outside area */}
+          <button
+            type="button"
+            aria-label="Close menu"
+            onClick={closeMenu}
+            className="absolute inset-0 h-full w-full bg-black/70"
+          />
 
-        <div
-          className={`absolute left-4 right-4 top-[64px] overflow-hidden rounded-2xl border border-white/10 bg-[#080D13]/95 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-all duration-300 sm:left-8 sm:right-8 sm:top-[74px] ${
-            isMenuOpen
-              ? "translate-y-0 scale-100 opacity-100"
-              : "-translate-y-3 scale-[0.98] opacity-0"
-          }`}
-        >
-          <div className="flex flex-col p-2">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={closeMenu}
-                className="rounded-xl px-4 py-3 text-[15px] font-medium text-white/75 transition hover:bg-white/[0.04] hover:text-[#B7C9DE]"
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Menu Panel */}
+          <div className="relative z-10 w-full border-b border-white/10 bg-[#05080D] shadow-[0_18px_60px_rgba(0,0,0,0.45)]">
+            <div className="flex flex-col">
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={closeMenu}
+                  className="border-t border-white/10 px-5 py-4 text-[15px] font-semibold tracking-[-0.01em] text-white transition hover:bg-[#0B1118] hover:text-[#B7C9DE] sm:px-8"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </header>
   );
 };

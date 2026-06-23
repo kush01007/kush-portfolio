@@ -22,12 +22,12 @@ const About = () => {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-black px-4 py-7 sm:px-8 lg:px-16 lg:py-0 xl:px-20"
+      className="relative overflow-hidden bg-black px-5 py-10 sm:px-8 lg:px-16 lg:py-20 xl:px-20"
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:44px_44px]" />
 
-      <div className="relative z-10">
-        <div className="grid gap-7 rounded-2xl border border-white/10 bg-[#080D13]/80 p-4 shadow-[0_20px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">
+      <div className="relative z-10 mx-auto max-w-[1500px]">
+        <div className="grid gap-8 rounded-2xl border border-white/10 bg-[#080D13]/80 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">
           <div className="flex max-w-[530px] flex-col justify-center">
             <div className="inline-flex w-fit items-center gap-2.5 rounded-lg border border-white/10 bg-[#0B1118]/80 px-3.5 py-2 text-[12px] text-white/85 sm:text-[13px]">
               <span className="h-2 w-2 rounded-full bg-[#9DB7D5] shadow-[0_0_12px_rgba(157,183,213,0.8)]" />
@@ -81,11 +81,8 @@ const About = () => {
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(92,146,210,0.28),transparent_28%),radial-gradient(circle_at_50%_18%,rgba(157,183,213,0.12),transparent_34%),linear-gradient(180deg,rgba(8,14,21,0)_0%,rgba(8,14,21,0)_42%,rgba(8,14,21,0.92)_74%)] sm:bg-[radial-gradient(circle_at_50%_28%,rgba(92,146,210,0.28),transparent_28%),radial-gradient(circle_at_50%_20%,rgba(157,183,213,0.12),transparent_34%),linear-gradient(180deg,rgba(8,14,21,0)_0%,rgba(8,14,21,0)_45%,rgba(8,14,21,0.92)_76%)]" />
 
             <div className="pointer-events-none absolute left-1/2 top-[22%] h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#24558E]/25 blur-[70px] sm:top-[27%] sm:h-52 sm:w-52" />
-
             <div className="pointer-events-none absolute left-1/2 top-[22%] h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/10 sm:top-[27%] sm:h-36 sm:w-36" />
-
             <div className="pointer-events-none absolute left-1/2 top-[22%] h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/[0.07] sm:top-[27%] sm:h-56 sm:w-56" />
-
             <div className="pointer-events-none absolute left-1/2 top-[22%] h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#9DB7D5]/[0.05] sm:top-[27%] sm:h-72 sm:w-72" />
 
             <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(157,183,213,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(157,183,213,0.035)_1px,transparent_1px)] bg-[size:34px_34px]" />
