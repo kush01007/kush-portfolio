@@ -758,12 +758,12 @@ const GalaxyBaseScene = () => {
       <div className="absolute inset-x-0 bottom-[86px] top-[250px] sm:bottom-0 sm:top-[260px] lg:inset-0">
         <Canvas
           dpr={compactViewport ? 1 : [1, 1.35]}
-          frameloop={reducedMotion ? "demand" : "always"}
-          performance={{ min: 0.55 }}
+          frameloop={compactViewport ? "demand" : reducedMotion ? "demand" : "always"}
+          performance={{ min: 0.45 }}
           gl={{
             antialias: true,
             alpha: true,
-            powerPreference: "high-performance",
+            powerPreference: compactViewport ? "low-power" : "high-performance",
             toneMapping: ACESFilmicToneMapping,
             toneMappingExposure: 0.82,
           }}
