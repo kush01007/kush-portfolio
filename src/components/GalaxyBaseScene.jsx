@@ -665,6 +665,7 @@ const GalaxyBaseScene = () => {
   const [hoveredTech, setHoveredTech] = useState(null);
   const [selectedTech, setSelectedTech] = useState(null);
   const compactViewport = useMediaQuery("(max-width: 639px)");
+  const tabletViewport = useMediaQuery("(min-width:640px) and (max-width:1023px)");
   const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const focusedTech = hoveredTech || selectedTech;
   const displayedTech = focusedTech || techOrbs[0];
@@ -757,16 +758,16 @@ const GalaxyBaseScene = () => {
 
       <div className="absolute inset-x-0 bottom-[86px] top-[250px] sm:bottom-0 sm:top-[260px] lg:inset-0">
         <Canvas
-          dpr={compactViewport ? 1 : [1, 1.35]}
-          frameloop={reducedMotion ? "demand" : "always"}
-          performance={{ min: 0.45 }}
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: compactViewport ? "low-power" : "high-performance",
-            toneMapping: ACESFilmicToneMapping,
-            toneMappingExposure: 0.82,
-          }}
+            dpr={compactViewport || tabletViewport ? 1 : [1, 1.35]}
+            frameloop={reducedMotion ? "demand" : tabletViewport ? "demand" : "always"}
+            performance={{ min: tabletViewport ? 0.28 : 0.45 }}
+            gl={{
+              antialias: true,
+              alpha: true,
+              powerPreference: compactViewport || tabletViewport ? "low-power" : "high-performance",
+              toneMapping: ACESFilmicToneMapping,
+              toneMappingExposure: 0.82,
+            }}
           style={{ touchAction: "none" }}
           onPointerMissed={() => {
             setHoveredTech(null);
