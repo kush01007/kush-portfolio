@@ -27,7 +27,7 @@ const About = () => {
       <div className="pointer-events-none absolute inset-0" />
 
       <div className="relative z-10 mx-auto max-w-[1500px]">
-        <div className="grid gap-8 rounded-2xl border border-white/10 bg-[#080D13]/80 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">
+        <div className="grid gap-8 rounded-2xl border border-white/10 bg-[#080D13]/20 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">
           <div className="flex max-w-[530px] flex-col justify-center">
             <div className="inline-flex w-fit items-center gap-2.5 rounded-lg border border-white/10 bg-[#0B1118]/80 px-3.5 py-2 text-[12px] text-white/85 sm:text-[13px] lg:mb-6 ">
               <span className="h-2 w-2 rounded-full bg-[#9DB7D5] shadow-[0_0_12px_rgba(157,183,213,0.8)]" />
