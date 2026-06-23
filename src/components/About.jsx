@@ -22,7 +22,7 @@ const About = () => {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-black px-5 py-10 sm:px-8 lg:px-16 lg:py-20 xl:px-20"
+      className="relative overflow-hidden bg-[#05080D px-5 py-10 sm:px-8 lg:px-16 lg:py-20 xl:px-20"
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:44px_44px]" />
 
