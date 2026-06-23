@@ -22,9 +22,9 @@ const About = () => {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-[#05080D px-5 py-10 sm:px-8 lg:px-16 lg:py-20 xl:px-20"
+      className="relative overflow-hidden bg-[#05080D px-5 py-10 sm:px-8 lg:px-16 lg:py-5 xl:px-20"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.04)_1px,transparent_1px)] bg-[size:44px_44px]" />
+      <div className="pointer-events-none absolute inset-0" />
 
       <div className="relative z-10 mx-auto max-w-[1500px]">
         <div className="grid gap-8 rounded-2xl border border-white/10 bg-[#080D13]/80 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.22)] backdrop-blur-xl sm:p-8 lg:grid-cols-[0.95fr_1.05fr] lg:gap-12 lg:p-10">

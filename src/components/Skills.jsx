@@ -97,7 +97,7 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      className="relative overflow-hidden border-b border-white/10 bg-[#05080D] px-6 py-12 sm:px-8 lg:px-16 lg:py-14 xl:px-20"
+      className="relative overflow-hidden  border-white/10 bg-[#05080D] px-6 py-12 sm:px-8 lg:px-16 lg:py-14 xl:px-20"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,rgba(157,183,213,0.07)_1px,transparent_1px)] bg-[size:28px_28px] opacity-30" />
       <div className="pointer-events-none absolute left-[25%] top-[20%] h-72 w-72 rounded-full bg-[#17365F]/10 blur-[110px]" />

@@ -138,7 +138,7 @@ const Projects = () => {
       id="projects"
       className="relative overflow-hidden bg-[#05080D] px-5 py-8 sm:px-7 lg:px-10 xl:px-12"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:44px_44px]" />
+      <div className="pointer-events-none absolute inset-0 " />
 
       <div className="relative z-10">
         <div className="mb-5">

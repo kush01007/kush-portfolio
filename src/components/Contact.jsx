@@ -33,11 +33,9 @@ const Contact = () => {
       id="contact"
       className="relative overflow-hidden bg-[#05080D] px-6 py-8 sm:px-8 lg:px-16 xl:px-20"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:44px_44px]" />
+      <div className="pointer-events-none absolute inset-0" />
 
-      <div className="pointer-events-none absolute left-[-10%] top-1/2 h-[260px] w-[420px] -translate-y-1/2 rounded-full bg-[#17365f]/18 blur-[110px]" />
-      <div className="pointer-events-none absolute right-[-8%] top-1/2 h-[260px] w-[420px] -translate-y-1/2 rounded-full bg-[#9DB7D5]/8 blur-[120px]" />
-
+     
       <div className="relative z-10">
         <div className="overflow-hidden rounded-2xl border border-[#1F2937]/80 bg-[#080D13]/75 px-5 py-6 shadow-[0_20px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:px-7 sm:py-7 lg:min-h-[205px] lg:px-8 lg:py-8">
           <div className="grid h-full items-center gap-7 lg:grid-cols-[1fr_auto]">

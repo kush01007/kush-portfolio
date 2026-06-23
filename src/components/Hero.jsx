@@ -22,7 +22,7 @@ const Hero = () => {
   return (
     <section className="relative overflow-hidden bg-[#05080D] pt-14 sm:pt-16">
       {/* Grid background */}
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:44px_44px]" />
+      <div className="pointer-events-none absolute inset-0 " />
 
       {/* Glows */}
       <div className="pointer-events-none absolute left-[-12%] top-[22%] h-[360px] w-[520px] rounded-full bg-[#17365f]/20 blur-[120px]" />
