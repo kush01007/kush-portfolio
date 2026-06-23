@@ -39,13 +39,13 @@ const Hero = () => {
 
       <div className="relative z-10 mx-auto grid w-full items-center gap-12 px-6 py-10 sm:px-8 sm:py-12 lg:min-h-[610px] lg:grid-cols-[0.92fr_1.08fr] lg:px-16 lg:py-12 xl:px-20">
         {/* Left content */}
-        <div className="max-w-[525px]">
+        <div className="max-w-[525px] lg:-translate-y-4">
           <div className="mb-5 inline-flex items-center gap-2.5 rounded-lg border border-white/15 bg-white/[0.035] px-3.5 py-2 text-sm font-medium text-white shadow-[0_0_40px_rgba(157,183,213,0.08)]">
             <span className="h-2 w-2 rounded-full bg-[#38BDF8] shadow-[0_0_16px_rgba(56,189,248,0.9)]" />
             {profile.status}
           </div>
 
-          <h1 className="text-[64px] font-black leading-[0.88] tracking-[-0.065em] text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.12)] sm:text-[82px] lg:text-[88px]">
+          <h1 className="text-[68px] font-black leading-[0.9] tracking-[-0.045em] text-white drop-shadow-[0_0_35px_rgba(255,255,255,0.12)] sm:text-[86px] lg:text-[94px]">
             {profile.name}
           </h1>
 

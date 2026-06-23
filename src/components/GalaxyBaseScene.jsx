@@ -14,44 +14,61 @@ import {
 } from "@react-three/postprocessing";
 import { Mouse, MousePointer2 } from "lucide-react";
 import { BlendFunction } from "postprocessing";
-import { ACESFilmicToneMapping, AdditiveBlending } from "three";
+import {
+  ACESFilmicToneMapping,
+  AdditiveBlending,
+  CanvasTexture,
+  LinearFilter,
+  SRGBColorSpace,
+} from "three";
 import TechOrb from "./TechOrb";
 import { techOrbs, technologyShowcase } from "../data/portfolioData";
 
 const galaxyPaths = [
-  { radius: 1.62, depth: 0.94, tilt: 0.025, opacity: 0.07, width: 0.32 },
-  { radius: 2.15, depth: 1, tilt: -0.06, opacity: 0.2, width: 0.62 },
-  { radius: 2.58, depth: 0.9, tilt: 0.045, opacity: 0.075, width: 0.36, dashed: true },
-  { radius: 3.15, depth: 1, tilt: 0.055, opacity: 0.16, width: 0.54 },
-  { radius: 3.62, depth: 0.93, tilt: -0.025, opacity: 0.06, width: 0.34, dashed: true },
-  { radius: 4.2, depth: 1, tilt: -0.04, opacity: 0.13, width: 0.48 },
-  { radius: 4.62, depth: 0.88, tilt: 0.035, opacity: 0.055, width: 0.32 },
+  { radius: 1.72, depth: 0.84, tilt: 0.018, opacity: 0.07, width: 0.3 },
+  { radius: 2.24, depth: 0.95, tilt: -0.052, opacity: 0.17, width: 0.52 },
+  { radius: 2.73, depth: 0.88, tilt: 0.038, opacity: 0.075, width: 0.32 },
+  { radius: 3.28, depth: 1.02, tilt: 0.058, opacity: 0.145, width: 0.48 },
+  { radius: 3.74, depth: 0.91, tilt: -0.032, opacity: 0.065, width: 0.3 },
+  { radius: 4.22, depth: 1.04, tilt: -0.045, opacity: 0.125, width: 0.44 },
+  { radius: 4.68, depth: 0.9, tilt: 0.03, opacity: 0.06, width: 0.3 },
+  { radius: 5.06, depth: 0.98, tilt: -0.018, opacity: 0.09, width: 0.38 },
 ];
 
-const coreRingRadii = [0.18, 0.3, 0.44, 0.6, 0.78, 0.98, 1.2, 1.42];
+const coreRingRadii = [
+  0.16, 0.27, 0.4, 0.54, 0.7, 0.88, 1.08, 1.29, 1.51,
+];
+
+const highlightedArcs = [
+  { pathIndex: 1, start: 3.52, end: 4.34, opacity: 0.48, width: 0.78 },
+  { pathIndex: 3, start: 4.46, end: 5.28, opacity: 0.42, width: 0.72 },
+  { pathIndex: 5, start: 5.72, end: 6.42, opacity: 0.4, width: 0.7 },
+  { pathIndex: 5, start: 1.12, end: 1.92, opacity: 0.34, width: 0.66 },
+  { pathIndex: 7, start: 2.02, end: 2.74, opacity: 0.3, width: 0.62 },
+];
 
 const sceneCompositions = {
   mobile: {
-    camera: [0, 4.2, 12.8],
-    target: [0, -0.15, 0],
-    fov: 46,
-    rigPosition: [0, -0.3, 0],
+    camera: [6.55, 3.65, 7.35],
+    target: [0, -0.28, 0],
+    fov: 43,
+    rigPosition: [0, 0.08, 0],
     rigRotation: [0, -0.04, 0.015],
-    rigScale: 0.96,
+    rigScale: 1.12,
   },
   tablet: {
-    camera: [0, 4.8, 11.8],
+    camera: [7.85, 4.8, 8.85],
     target: [0, -0.35, 0],
     fov: 42,
-    rigPosition: [0.1, -0.45, 0],
+    rigPosition: [0.1, -0.12, 0],
     rigRotation: [0, -0.055, 0.012],
     rigScale: 1.04,
   },
   desktop: {
-    camera: [0.15, 5.25, 10.8],
-    target: [0.15, -0.55, 0],
+    camera: [7.95, 5.25, 8.15],
+    target: [0.8, -0.55, 0],
     fov: 38,
-    rigPosition: [0.15, -0.55, 0],
+    rigPosition: [0.8, 0, 0],
     rigRotation: [0, -0.065, 0.01],
     rigScale: 1.12,
   },
@@ -92,6 +109,18 @@ const createOrbitPoints = ({
     ];
   });
 
+const createOrbitArcPoints = (path, start, end, segments = 72) =>
+  Array.from({ length: segments + 1 }, (_, index) => {
+    const angle = start + (index / segments) * (end - start);
+    const flatDepth = Math.sin(angle) * path.radius * path.depth;
+
+    return [
+      Math.cos(angle) * path.radius,
+      flatDepth * Math.sin(path.tilt),
+      flatDepth * Math.cos(path.tilt),
+    ];
+  });
+
 const pointOnOrbit = ({ radius, depth = 1, tilt = 0 }, angle) => {
   const flatDepth = Math.sin(angle) * radius * depth;
 
@@ -105,6 +134,35 @@ const pointOnOrbit = ({ radius, depth = 1, tilt = 0 }, angle) => {
 const seededValue = (index, seed) => {
   const value = Math.sin(index * 12.9898 + seed * 78.233) * 43758.5453;
   return value - Math.floor(value);
+};
+
+const createGlowTexture = ({
+  inner = "rgba(235,248,255,1)",
+  middle = "rgba(110,184,247,0.42)",
+  outer = "rgba(70,145,215,0)",
+} = {}) => {
+  const canvas = document.createElement("canvas");
+  canvas.width = 160;
+  canvas.height = 160;
+
+  const context = canvas.getContext("2d");
+  const gradient = context.createRadialGradient(80, 80, 0, 80, 80, 78);
+
+  gradient.addColorStop(0, inner);
+  gradient.addColorStop(0.16, "rgba(210,240,255,0.92)");
+  gradient.addColorStop(0.34, middle);
+  gradient.addColorStop(1, outer);
+
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 160, 160);
+
+  const texture = new CanvasTexture(canvas);
+  texture.colorSpace = SRGBColorSpace;
+  texture.minFilter = LinearFilter;
+  texture.magFilter = LinearFilter;
+  texture.needsUpdate = true;
+
+  return texture;
 };
 
 const StarField = ({
@@ -148,7 +206,89 @@ const StarField = ({
   );
 };
 
+const OrbitGlitter = ({ count, seed, size, opacity }) => {
+  const positions = useMemo(() => {
+    const points = new Float32Array(count * 3);
+
+    for (let index = 0; index < count; index += 1) {
+      const offset = index * 3;
+      const useCore = seededValue(index, seed + 7) < 0.58;
+      const path = useCore
+        ? {
+            radius:
+              coreRingRadii[
+                Math.floor(
+                  seededValue(index, seed + 11) * coreRingRadii.length,
+                )
+              ],
+            depth: 0.8,
+            tilt: 0.012,
+          }
+        : galaxyPaths[
+            Math.floor(
+              seededValue(index, seed + 13) * galaxyPaths.length,
+            )
+          ];
+      const angle = seededValue(index, seed + 17) * Math.PI * 2;
+      const position = pointOnOrbit(path, angle);
+      const radialJitter = (seededValue(index, seed + 19) - 0.5) * 0.055;
+
+      points[offset] = position[0] * (1 + radialJitter);
+      points[offset + 1] =
+        position[1] + (seededValue(index, seed + 23) - 0.5) * 0.035;
+      points[offset + 2] = position[2] * (1 + radialJitter);
+    }
+
+    return points;
+  }, [count, seed]);
+
+  return (
+    <points>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        color="#DDF2FF"
+        size={size}
+        sizeAttenuation
+        transparent
+        opacity={opacity}
+        blending={AdditiveBlending}
+        depthWrite={false}
+        toneMapped={false}
+      />
+    </points>
+  );
+};
+
 const CentralGalaxyCore = () => {
+  const coreGlow = useMemo(() => createGlowTexture(), []);
+  const softHalo = useMemo(
+    () =>
+      createGlowTexture({
+        inner: "rgba(155,211,255,0.42)",
+        middle: "rgba(80,156,230,0.16)",
+        outer: "rgba(30,85,145,0)",
+      }),
+    [],
+  );
+  const coreSparkles = useMemo(
+    () =>
+      Array.from({ length: 28 }, (_, index) => {
+        const angle = seededValue(index, 61) * Math.PI * 2;
+        const radius = 0.12 + seededValue(index, 63) * 0.62;
+        return {
+          position: [
+            Math.cos(angle) * radius,
+            (seededValue(index, 67) - 0.5) * 0.08,
+            Math.sin(angle) * radius * 0.48,
+          ],
+          size: 0.008 + seededValue(index, 71) * 0.014,
+          opacity: 0.35 + seededValue(index, 73) * 0.45,
+        };
+      }),
+    [],
+  );
   const innerPaths = useMemo(
     () =>
       coreRingRadii.map((radius, index) => ({
@@ -183,32 +323,64 @@ const CentralGalaxyCore = () => {
         <meshBasicMaterial
           color="#173E63"
           transparent
-          opacity={0.055}
+          opacity={0.035}
           blending={AdditiveBlending}
           depthWrite={false}
         />
       </mesh>
 
-      <mesh>
-        <sphereGeometry args={[0.055, 20, 20]} />
-        <meshBasicMaterial color="#E9F6FF" toneMapped={false} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.15, 24, 24]} />
-        <meshBasicMaterial
-          color="#70B9F4"
+      <sprite scale={[1.45, 1.45, 1]}>
+        <spriteMaterial
+          map={softHalo}
+          color="#83C8FF"
           transparent
-          opacity={0.16}
+          opacity={0.38}
           blending={AdditiveBlending}
           depthWrite={false}
           toneMapped={false}
         />
+      </sprite>
+
+      <sprite scale={[0.58, 0.58, 1]}>
+        <spriteMaterial
+          map={coreGlow}
+          color="#DDF5FF"
+          transparent
+          opacity={0.95}
+          blending={AdditiveBlending}
+          depthWrite={false}
+          toneMapped={false}
+        />
+      </sprite>
+
+      {coreSparkles.map((sparkle, index) => (
+        <sprite
+          key={index}
+          position={sparkle.position}
+          scale={[sparkle.size, sparkle.size, 1]}
+        >
+          <spriteMaterial
+            map={coreGlow}
+            color="#DDF5FF"
+            transparent
+            opacity={sparkle.opacity}
+            blending={AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </sprite>
+      ))}
+
+      <mesh>
+        <sphereGeometry args={[0.038, 18, 18]} />
+        <meshBasicMaterial color="#F3FBFF" toneMapped={false} />
       </mesh>
+
       <pointLight
         position={[0, 0.16, 0]}
         color="#76BEFF"
-        intensity={3.4}
-        distance={2.2}
+        intensity={5.8}
+        distance={3.2}
         decay={2}
       />
     </group>
@@ -225,21 +397,38 @@ const GalaxyOrbitSystem = () => {
     [],
   );
 
+  const highlightPaths = useMemo(
+    () =>
+      highlightedArcs.map((highlight) => ({
+        ...highlight,
+        points: createOrbitArcPoints(
+          galaxyPaths[highlight.pathIndex],
+          highlight.start,
+          highlight.end,
+        ),
+      })),
+    [],
+  );
+
   const markers = useMemo(
     () => [
-      { position: pointOnOrbit(galaxyPaths[1], 0.28), size: 0.022 },
-      { position: pointOnOrbit(galaxyPaths[1], 3.72), size: 0.017 },
-      { position: pointOnOrbit(galaxyPaths[3], 0.86), size: 0.02 },
-      { position: pointOnOrbit(galaxyPaths[3], 2.62), size: 0.014 },
-      { position: pointOnOrbit(galaxyPaths[5], 0.48), size: 0.025 },
-      { position: pointOnOrbit(galaxyPaths[5], 2.96), size: 0.018 },
-      { position: pointOnOrbit(galaxyPaths[6], 5.52), size: 0.014 },
+      { position: pointOnOrbit(galaxyPaths[1], 0.3), size: 0.018 },
+      { position: pointOnOrbit(galaxyPaths[1], 3.68), size: 0.014 },
+      { position: pointOnOrbit(galaxyPaths[2], 4.24), size: 0.012 },
+      { position: pointOnOrbit(galaxyPaths[3], 0.84), size: 0.019 },
+      { position: pointOnOrbit(galaxyPaths[3], 2.58), size: 0.012 },
+      { position: pointOnOrbit(galaxyPaths[4], 5.3), size: 0.014 },
+      { position: pointOnOrbit(galaxyPaths[5], 0.5), size: 0.022 },
+      { position: pointOnOrbit(galaxyPaths[5], 2.94), size: 0.016 },
+      { position: pointOnOrbit(galaxyPaths[6], 5.52), size: 0.012 },
+      { position: pointOnOrbit(galaxyPaths[7], 1.34), size: 0.017 },
+      { position: pointOnOrbit(galaxyPaths[7], 3.3), size: 0.011 },
     ],
     [],
   );
 
   return (
-    <group>
+    <group position={[0, -0.13, 0]}>
       {paths.map((path) => (
         <Line
           key={`${path.radius}-${path.tilt}`}
@@ -248,24 +437,44 @@ const GalaxyOrbitSystem = () => {
           lineWidth={path.width}
           transparent
           opacity={path.opacity}
-          dashed={path.dashed}
-          dashSize={0.075}
-          gapSize={0.055}
           depthWrite={false}
         />
       ))}
 
+      {highlightPaths.map((path, index) => (
+        <group key={`${path.pathIndex}-${index}`}>
+          <Line
+            points={path.points}
+            color="#4B9FDF"
+            lineWidth={path.width * 3.1}
+            transparent
+            opacity={0.055}
+            blending={AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+          <Line
+            points={path.points}
+            color="#9AD5FF"
+            lineWidth={path.width}
+            transparent
+            opacity={path.opacity}
+            blending={AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </group>
+      ))}
+
       {markers.map((marker, index) => (
         <mesh key={index} position={marker.position}>
-          <sphereGeometry args={[marker.size, 10, 10]} />
-          <meshBasicMaterial
-            color="#BDE3FF"
-            toneMapped={false}
-            transparent
-            opacity={0.9}
-          />
+          <sphereGeometry args={[marker.size * 0.44, 8, 8]} />
+          <meshBasicMaterial color="#EAF7FF" toneMapped={false} />
         </mesh>
       ))}
+
+      <OrbitGlitter count={78} seed={29} size={0.012} opacity={0.42} />
+      <OrbitGlitter count={32} seed={47} size={0.019} opacity={0.72} />
 
       <CentralGalaxyCore />
     </group>
@@ -282,8 +491,8 @@ const BaseScene = ({
   const [draggingOrb, setDraggingOrb] = useState(false);
   const mobile = canvasWidth < 640;
   const tablet = canvasWidth >= 640 && canvasWidth < 1024;
-  const orbScale = mobile ? 0.69 : tablet ? 0.82 : 0.9;
-  const orbitScale = mobile ? 0.68 : tablet ? 0.85 : 1;
+  const orbScale = mobile ? 0.92 : tablet ? 0.82 : 0.9;
+  const orbitScale = mobile ? 1.12 : tablet ? 0.96 : 1.14;
   const composition = mobile
     ? sceneCompositions.mobile
     : tablet
@@ -328,27 +537,27 @@ const BaseScene = ({
       <Environment resolution={mobile ? 64 : 128}>
         <Lightformer
           form="rect"
-          intensity={1.45}
+          intensity={1.15}
           color="#F4FAFF"
           position={[-0.4, 4.8, 4.2]}
           rotation={[Math.PI / 2, 0, 0]}
-          scale={[5.4, 0.46, 1]}
+          scale={[5.8, 0.82, 1]}
         />
         <Lightformer
           form="rect"
-          intensity={1.7}
+          intensity={1.3}
           color="#E5F3FF"
           position={[-4.4, 1.25, 3.4]}
           rotation={[0, Math.PI / 3, 0]}
-          scale={[0.38, 4.4, 1]}
+          scale={[0.72, 4.6, 1]}
         />
         <Lightformer
           form="rect"
-          intensity={1.15}
+          intensity={0.9}
           color="#DDEEFF"
           position={[4.3, -0.8, 2.8]}
           rotation={[0, -Math.PI / 3, 0]}
-          scale={[0.3, 2.8, 1]}
+          scale={[0.58, 3.1, 1]}
         />
         <Lightformer
           form="rect"
@@ -431,17 +640,15 @@ const BaseScene = ({
         target={composition.target}
         minPolarAngle={Math.PI * 0.22}
         maxPolarAngle={Math.PI * 0.62}
-        minAzimuthAngle={-Math.PI * 0.42}
-        maxAzimuthAngle={Math.PI * 0.42}
       />
 
       <EffectComposer multisampling={0} enableNormalPass={false}>
         <Bloom
-          intensity={mobile ? 0.2 : tablet ? 0.25 : 0.28}
-          luminanceThreshold={0.88}
-          luminanceSmoothing={0.14}
+          intensity={mobile ? 0.22 : tablet ? 0.3 : 0.36}
+          luminanceThreshold={0.82}
+          luminanceSmoothing={0.18}
           mipmapBlur
-          radius={0.3}
+          radius={0.4}
         />
         <Vignette
           eskil={false}
@@ -548,7 +755,7 @@ const GalaxyBaseScene = () => {
         <span className="h-px w-16 bg-gradient-to-l from-transparent to-white/25" />
       </div>
 
-      <div className="absolute inset-x-0 bottom-[86px] top-[250px] sm:bottom-0 sm:top-[260px] lg:inset-0 lg:left-[220px]">
+      <div className="absolute inset-x-0 bottom-[86px] top-[250px] sm:bottom-0 sm:top-[260px] lg:inset-0">
         <Canvas
           dpr={compactViewport ? 1 : [1, 1.35]}
           frameloop={reducedMotion ? "demand" : "always"}

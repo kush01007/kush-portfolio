@@ -1,33 +1,13 @@
 import { memo, useEffect, useMemo, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { Billboard, Html, MeshTransmissionMaterial } from "@react-three/drei";
-import { AdditiveBlending, Color } from "three";
+import { Billboard } from "@react-three/drei";
+import {
+  CanvasTexture,
+  LinearFilter,
+  SRGBColorSpace,
+  Vector3,
+} from "three";
 import TechIcon3D from "./TechIcon3D";
-
-const rimVertexShader = `
-  varying vec3 vWorldNormal;
-  varying vec3 vViewDirection;
-
-  void main() {
-    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-    vWorldNormal = normalize(mat3(modelMatrix) * normal);
-    vViewDirection = normalize(cameraPosition - worldPosition.xyz);
-    gl_Position = projectionMatrix * viewMatrix * worldPosition;
-  }
-`;
-
-const rimFragmentShader = `
-  uniform vec3 uColor;
-  uniform float uIntensity;
-  varying vec3 vWorldNormal;
-  varying vec3 vViewDirection;
-
-  void main() {
-    float fresnel = pow(1.0 - abs(dot(vWorldNormal, vViewDirection)), 5.6);
-    float edge = smoothstep(0.18, 0.96, fresnel);
-    gl_FragColor = vec4(uColor * (0.82 + edge * 0.26), edge * uIntensity);
-  }
-`;
 
 const TechOrb = ({
   label,
@@ -52,28 +32,48 @@ const TechOrb = ({
 }) => {
   const groupRef = useRef(null);
   const orbRef = useRef(null);
-  const rimMaterialRef = useRef(null);
+  const overlayRef = useRef(null);
   const draggingRef = useRef(false);
   const dragMovedRef = useRef(false);
+  const spinVelocityRef = useRef({ x: 0, y: 0 });
   const lastPointerRef = useRef({ x: 0, y: 0 });
+  const orbWorldPositionRef = useRef(new Vector3());
+  const orbWorldScaleRef = useRef(new Vector3());
+  const overlayWorldPositionRef = useRef(new Vector3());
+  const overlayLocalPositionRef = useRef(new Vector3());
   const invalidate = useThree((state) => state.invalidate);
   const has3DModel = Boolean(model3D);
-  const sphereSegments = lowDetail ? 24 : 44;
-  const glassBackground = useMemo(() => new Color("#010407"), []);
-  const rimUniforms = useMemo(
-    () => ({
-      uColor: { value: new Color("#CBE3F5") },
-      uIntensity: { value: 0.29 },
-    }),
-    [],
-  );
-  const innerRimUniforms = useMemo(
-    () => ({
-      uColor: { value: new Color("#7199BC") },
-      uIntensity: { value: 0.13 },
-    }),
-    [],
-  );
+  const labelTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 128;
+    const context = canvas.getContext("2d");
+    let fontSize = 50;
+
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.font = `600 ${fontSize}px Arial, sans-serif`;
+
+    while (context.measureText(label).width > 450 && fontSize > 30) {
+      fontSize -= 2;
+      context.font = `600 ${fontSize}px Arial, sans-serif`;
+    }
+
+    context.shadowColor = "rgba(0, 0, 0, 0.95)";
+    context.shadowBlur = 12;
+    context.fillStyle = "#FFFFFF";
+    context.fillText(label, canvas.width / 2, canvas.height / 2);
+
+    const texture = new CanvasTexture(canvas);
+    texture.colorSpace = SRGBColorSpace;
+    texture.premultiplyAlpha = true;
+    texture.minFilter = LinearFilter;
+    texture.magFilter = LinearFilter;
+    texture.needsUpdate = true;
+    return texture;
+  }, [label]);
 
   const finishDrag = (event) => {
     if (!draggingRef.current) return;
@@ -93,6 +93,8 @@ const TechOrb = ({
       document.body.style.cursor = "";
     };
   }, []);
+
+  useEffect(() => () => labelTexture?.dispose(), [labelTexture]);
 
   useFrame((state, delta) => {
     if (!groupRef.current || !orbRef.current) return;
@@ -114,9 +116,35 @@ const TechOrb = ({
         ? Math.sin(elapsed * 0.42 + orbitAngle) * floatAmplitude
         : 0);
 
+    if (overlayRef.current) {
+      groupRef.current.updateWorldMatrix(true, false);
+      groupRef.current.getWorldPosition(orbWorldPositionRef.current);
+      groupRef.current.getWorldScale(orbWorldScaleRef.current);
+
+      overlayWorldPositionRef.current
+        .copy(state.camera.position)
+        .sub(orbWorldPositionRef.current)
+        .normalize()
+        .multiplyScalar(size * orbWorldScaleRef.current.x * 1.2)
+        .add(orbWorldPositionRef.current);
+
+      overlayLocalPositionRef.current.copy(overlayWorldPositionRef.current);
+      groupRef.current.worldToLocal(overlayLocalPositionRef.current);
+      overlayRef.current.position.copy(overlayLocalPositionRef.current);
+    }
+
     if (motionEnabled && !draggingRef.current) {
-      orbRef.current.rotation.y += motionDelta * rotationSpeed;
-      orbRef.current.rotation.x += motionDelta * rotationSpeed * 0.28;
+      const automaticSpinMultiplier = 2.4;
+      orbRef.current.rotation.y +=
+        motionDelta * rotationSpeed * automaticSpinMultiplier;
+      orbRef.current.rotation.x +=
+        motionDelta * rotationSpeed * 0.28 * automaticSpinMultiplier;
+
+      orbRef.current.rotation.x += spinVelocityRef.current.x;
+      orbRef.current.rotation.y += spinVelocityRef.current.y;
+      const inertiaDamping = Math.exp(-motionDelta * 3.2);
+      spinVelocityRef.current.x *= inertiaDamping;
+      spinVelocityRef.current.y *= inertiaDamping;
     }
 
     const ease = 1 - Math.exp(-motionDelta * 7);
@@ -124,13 +152,6 @@ const TechOrb = ({
     const nextScale = groupRef.current.scale.x +
       (targetScale - groupRef.current.scale.x) * ease;
     groupRef.current.scale.setScalar(nextScale);
-
-    if (rimMaterialRef.current) {
-      const targetRim = 0.29;
-      const currentRim = rimMaterialRef.current.uniforms.uIntensity.value;
-      rimMaterialRef.current.uniforms.uIntensity.value +=
-        (targetRim - currentRim) * ease;
-    }
 
   });
 
@@ -159,6 +180,7 @@ const TechOrb = ({
               x: event.clientX,
               y: event.clientY,
             };
+            spinVelocityRef.current = { x: 0, y: 0 };
             event.target.setPointerCapture?.(event.pointerId);
             document.body.style.cursor = "grabbing";
             onHoverChange?.(true);
@@ -177,6 +199,14 @@ const TechOrb = ({
 
             orbRef.current.rotation.y += deltaX * 0.012;
             orbRef.current.rotation.x += deltaY * 0.012;
+            spinVelocityRef.current.x = Math.max(
+              -0.035,
+              Math.min(0.035, deltaY * 0.0018),
+            );
+            spinVelocityRef.current.y = Math.max(
+              -0.035,
+              Math.min(0.035, deltaX * 0.0018),
+            );
             invalidate();
             lastPointerRef.current = {
               x: event.clientX,
@@ -196,59 +226,18 @@ const TechOrb = ({
             onSelect?.();
           }}
         >
-          <sphereGeometry args={[size, sphereSegments, sphereSegments]} />
-          <MeshTransmissionMaterial
-            background={glassBackground}
-            backside={!lowDetail}
-            backsideThickness={size * 0.28}
-            backsideEnvMapIntensity={1.15}
-            samples={lowDetail ? 2 : 3}
-            resolution={lowDetail ? 48 : 72}
-            backsideResolution={lowDetail ? 32 : 56}
-            color="#B8CAD7"
-            transmission={1}
-            thickness={size * 0.46}
-            ior={1.4}
-            roughness={0.035}
-            chromaticAberration={0.004}
-            anisotropicBlur={0.018}
-            distortion={0.006}
-            distortionScale={0.3}
-            temporalDistortion={0}
-            metalness={0}
+          <icosahedronGeometry args={[size, lowDetail ? 1 : 2]} />
+          <meshPhysicalMaterial
+            color="#000000"
+            roughness={0.1}
+            flatShading
+            metalness={0.08}
             clearcoat={1}
-            clearcoatRoughness={0.025}
-            attenuationColor="#263A49"
-            attenuationDistance={1.65}
-            envMapIntensity={1.75}
+            clearcoatRoughness={0.04}
+            envMapIntensity={1.4}
             specularIntensity={1}
             specularColor="#FFFFFF"
-            depthWrite={false}
-          />
-        </mesh>
-
-        <mesh>
-          <sphereGeometry args={[size * 0.992, sphereSegments, sphereSegments]} />
-          <shaderMaterial
-            vertexShader={rimVertexShader}
-            fragmentShader={rimFragmentShader}
-            uniforms={innerRimUniforms}
-            transparent
-            blending={AdditiveBlending}
-            depthWrite={false}
-          />
-        </mesh>
-
-        <mesh>
-          <sphereGeometry args={[size * 1.006, sphereSegments, sphereSegments]} />
-          <shaderMaterial
-            ref={rimMaterialRef}
-            vertexShader={rimVertexShader}
-            fragmentShader={rimFragmentShader}
-            uniforms={rimUniforms}
-            transparent
-            blending={AdditiveBlending}
-            depthWrite={false}
+            depthWrite
           />
         </mesh>
 
@@ -261,41 +250,45 @@ const TechOrb = ({
         </mesh>
         <pointLight
           color="#64B9FA"
-          intensity={0.52}
+          intensity={0.68}
           distance={size * 1.4}
           decay={2}
         />
       </group>
 
       {has3DModel && (
-        <Billboard follow position={[0, 0, 0]}>
-          <TechIcon3D
-            model={model3D}
-            src={modelPath}
-            color={modelColor}
-            size={size}
-            lowDetail={lowDetail}
-            isActive={isActive}
-            isDimmed={isDimmed}
-          />
+        <Billboard ref={overlayRef} follow position={[0, 0, 0]}>
+          <group>
+            <group position={[0, size * 0.12, 0]}>
+              <TechIcon3D
+                model={model3D}
+                src={modelPath}
+                color={modelColor}
+                size={size}
+                lowDetail={lowDetail}
+                isActive={isActive}
+                isDimmed={isDimmed}
+              />
+            </group>
+
+            {labelTexture && (
+              <mesh position={[0, -size * 0.42, 0.006]} renderOrder={11}>
+                <planeGeometry args={[size * 1.22, size * 0.305]} />
+                <meshBasicMaterial
+                  map={labelTexture}
+                  transparent
+                  opacity={isDimmed ? 0.24 : 1}
+                  alphaTest={0.04}
+                  premultipliedAlpha
+                  depthTest
+                  depthWrite={false}
+                  toneMapped={false}
+                />
+              </mesh>
+            )}
+          </group>
         </Billboard>
       )}
-
-      <Html
-        center
-        position={[0, -size * 0.58, 0]}
-        distanceFactor={7.2}
-        style={{ pointerEvents: "none" }}
-      >
-        <span
-          className="whitespace-nowrap text-[11px] font-medium tracking-wide text-white drop-shadow-[0_1px_5px_rgba(0,0,0,0.95)] transition-opacity duration-300"
-          style={{
-            opacity: isDimmed ? 0.24 : 1,
-          }}
-        >
-          {label}
-        </span>
-      </Html>
     </group>
   );
 };

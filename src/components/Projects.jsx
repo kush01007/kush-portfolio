@@ -30,7 +30,7 @@ const ProjectImage = ({ project, featured = false }) => {
         alt={`${project.title} preview`}
         className={`h-full w-full rounded-lg ${
           featured
-            ? "object-contain bg-[#F8FAFC]"
+            ? "object-cover bg-[#F8FAFC]"
             : "object-cover"
         }`}
       />
@@ -136,7 +136,7 @@ const Projects = () => {
   return (
     <section
       id="projects"
-      className="relative overflow-hidden bg-[#05080D] px-6 py-8 sm:px-8 lg:px-16 xl:px-20"
+      className="relative overflow-hidden bg-[#05080D] px-5 py-8 sm:px-7 lg:px-10 xl:px-12"
     >
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(148,163,184,0.035)_1px,transparent_1px),linear-gradient(to_bottom,rgba(148,163,184,0.035)_1px,transparent_1px)] bg-[size:44px_44px]" />
 
@@ -154,9 +154,9 @@ const Projects = () => {
             Featured Project
           </h3>
 
-          <div className="grid gap-6 lg:min-h-[285px] lg:grid-cols-[0.98fr_1.05fr_0.78fr] lg:items-center">
+          <div className="grid gap-6 lg:min-h-[285px] lg:grid-cols-[1.32fr_1fr_0.72fr] lg:items-center xl:grid-cols-[1.45fr_1fr_0.72fr]">
             <div className="overflow-hidden rounded-xl border border-[#1F2937]/80 bg-[#070B10] p-2">
-              <div className="flex min-h-[230px] items-center justify-center overflow-hidden rounded-lg bg-[#F8FAFC] lg:min-h-[270px]">
+              <div className="aspect-[1919/900] overflow-hidden rounded-lg bg-[#F8FAFC] ">
                 <ProjectImage project={featuredProject} featured />
               </div>
             </div>
@@ -233,20 +233,20 @@ const Projects = () => {
             More Projects
           </h3>
 
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-3 lg:grid-cols-3 xl:gap-4">
             {moreProjects.map((project) => (
               <article
                 key={project.number}
-                className="group rounded-xl border border-[#1F2937]/80 bg-[#080D13]/75 p-3 backdrop-blur-xl transition hover:border-[#9DB7D5]/25 hover:bg-[#0B1118]/85 sm:p-4"
+                className="group h-full rounded-xl border border-[#1F2937]/80 bg-[#080D13]/75 p-2.5 backdrop-blur-xl transition hover:border-[#9DB7D5]/25 hover:bg-[#0B1118]/85 sm:p-3"
               >
                 <div className="grid grid-cols-[0.9fr_1.1fr] gap-4 lg:block">
-                  <div className="overflow-hidden rounded-lg border border-[#1F2937]/80 bg-[#070B10] p-1.5">
-                    <div className="aspect-[4/3] overflow-hidden rounded-md lg:aspect-[16/9]">
+                  <div className="overflow-hidden rounded-lg border border-[#1F2937]/80 bg-[#070B10] p-1">
+                    <div className="aspect-[1919/900] overflow-hidden rounded-md">
                       <ProjectImage project={project} />
                     </div>
                   </div>
 
-                  <div className="min-w-0 lg:mt-4">
+                  <div className="min-w-0 lg:mt-3.5">
                     <div className="flex items-start gap-3">
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#1F2937]/90 bg-[#080D13]/90 text-xs font-medium text-white/65">
                         {project.number}

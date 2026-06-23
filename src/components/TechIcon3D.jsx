@@ -4,70 +4,6 @@ import { ExtrudeGeometry } from "three";
 import { SVGLoader } from "three/addons/loaders/SVGLoader.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 
-const reactRingRotations = [0, Math.PI / 3, -Math.PI / 3];
-
-const ReactIcon3D = ({
-  size,
-  lowDetail = false,
-  isDimmed = false,
-}) => {
-  const emissiveIntensity = isDimmed ? 0.28 : 1.1;
-  const color = isDimmed ? "#537286" : "#8EDBFF";
-
-  return (
-    <group
-      scale={size * 0.94}
-      renderOrder={3}
-    >
-      {reactRingRotations.map((rotation) => (
-        <mesh
-          key={rotation}
-          rotation={[0, 0, rotation]}
-          scale={[1, 0.42, 1]}
-          renderOrder={10}
-        >
-          <torusGeometry
-            args={[0.44, 0.034, lowDetail ? 8 : 12, lowDetail ? 36 : 64]}
-          />
-          <meshPhysicalMaterial
-            color={color}
-            emissive="#2E9ED9"
-            emissiveIntensity={emissiveIntensity * 0.56}
-            roughness={0.26}
-            metalness={0.06}
-            clearcoat={0.72}
-            clearcoatRoughness={0.14}
-            envMapIntensity={0.85}
-            transparent
-            opacity={isDimmed ? 0.42 : 1}
-            depthTest={false}
-            depthWrite={false}
-            toneMapped={false}
-          />
-        </mesh>
-      ))}
-
-      <mesh renderOrder={10}>
-        <sphereGeometry args={[0.092, lowDetail ? 16 : 24, lowDetail ? 16 : 24]} />
-        <meshPhysicalMaterial
-          color="#C8EEFF"
-          emissive="#4AB7ED"
-          emissiveIntensity={emissiveIntensity * 0.62}
-          roughness={0.24}
-          metalness={0.04}
-          clearcoat={0.7}
-          envMapIntensity={0.9}
-          transparent
-          opacity={isDimmed ? 0.42 : 1}
-          depthTest={false}
-          depthWrite={false}
-          toneMapped={false}
-        />
-      </mesh>
-    </group>
-  );
-};
-
 const ExtrudedSvgIcon = ({
   src,
   color,
@@ -125,8 +61,8 @@ const ExtrudedSvgIcon = ({
           clearcoatRoughness={0.14}
           envMapIntensity={0.9}
           transparent
-          opacity={isDimmed ? 0.42 : 1}
-          depthTest={false}
+          opacity={isDimmed ? 0.47 : 1}
+          depthTest
           depthWrite={false}
           toneMapped={false}
         />
@@ -135,8 +71,7 @@ const ExtrudedSvgIcon = ({
   );
 };
 
-const TechIcon3D = ({ model, src, color, ...props }) => {
-  if (model === "react") return <ReactIcon3D {...props} />;
+const TechIcon3D = ({ src, color, ...props }) => {
   return <ExtrudedSvgIcon src={src} color={color} {...props} />;
 };
 
