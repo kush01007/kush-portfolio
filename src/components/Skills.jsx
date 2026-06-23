@@ -115,7 +115,7 @@ const Skills = () => {
             return (
               <article
                 key={skill.title}
-                className="flex flex-col rounded-xl border border-white/10 bg-[#0B1118]/70 p-5 shadow-[0_14px_50px_rgba(0,0,0,0.16)] backdrop-blur-xl transition-colors hover:border-[#9DB7D5]/25"
+                className="flex flex-col rounded-xl border border-white/10 bg-[#0B1118]/70 p-5 shadow-[0_14px_50px_rgba(0,0,0,0.16)] backdrop-blur-xl hover:border-white/10 hover:shadow-[0_14px_50px_rgba(0,0,0,0.16)]"
               >
                 <div className="flex items-start gap-4">
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl border border-white/[0.04] bg-[#0F1722] text-[#9DC9F3] shadow-[0_0_22px_rgba(157,183,213,0.08)]">
