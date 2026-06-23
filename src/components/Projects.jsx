@@ -31,7 +31,7 @@ const ProjectImage = ({ project, featured = false }) => {
         className={`h-full w-full rounded-lg ${
           featured
             ? "object-cover bg-[#F8FAFC]"
-            : "object-cover"
+            : "object-contain bg-[#070B10] object-center"
         }`}
       />
     );
@@ -237,16 +237,10 @@ const Projects = () => {
             {moreProjects.map((project) => (
               <article
                 key={project.number}
-                className="group h-full rounded-xl border border-[#1F2937]/80 bg-[#080D13]/75 p-2.5 backdrop-blur-xl transition hover:border-[#9DB7D5]/25 hover:bg-[#0B1118]/85 sm:p-3"
+                className="group h-full min-h-[220px] sm:min-h-[240px] rounded-xl border border-[#1F2937]/80 bg-[#080D13]/75 p-2.5 backdrop-blur-xl transition hover:border-[#9DB7D5]/25 hover:bg-[#0B1118]/85 sm:p-3"
               >
-                <div className="grid grid-cols-[0.9fr_1.1fr] gap-4 lg:block">
-                  <div className="overflow-hidden rounded-lg border border-[#1F2937]/80 bg-[#070B10] p-1">
-                    <div className="aspect-[1919/900] overflow-hidden rounded-md">
-                      <ProjectImage project={project} />
-                    </div>
-                  </div>
-
-                  <div className="min-w-0 lg:mt-3.5">
+                <div className="flex flex-col lg:flex-row items-stretch gap-4">
+                  <div className="min-w-0 lg:order-2 lg:mt-3.5">
                     <div className="flex items-start gap-3">
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-[#1F2937]/90 bg-[#080D13]/90 text-xs font-medium text-white/65">
                         {project.number}
@@ -292,6 +286,12 @@ const Projects = () => {
                         size={18}
                         className="text-white/25 transition group-hover:text-[#9DB7D5]"
                       />
+                    </div>
+                  </div>
+
+                  <div className="overflow-hidden rounded-lg border border-[#1F2937]/80 bg-[#070B10] p-1 lg:order-1">
+                    <div className="h-full w-full rounded-md min-h-[80px] sm:min-h-[100px] lg:min-h-[120px] max-h-[120px] sm:max-h-[140px] lg:max-h-[160px] overflow-hidden">
+                      <ProjectImage project={project} />
                     </div>
                   </div>
                 </div>

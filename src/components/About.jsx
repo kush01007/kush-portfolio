@@ -118,7 +118,7 @@ const About = () => {
                         />
                         {detail.label}
                       </span>
-                      <span className="text-right text-[15px] text-white/80">
+                      <span className="text-right text-[15px] text-white/80 break-all max-w-[160px] sm:max-w-[220px] lg:max-w-none">
                         {detail.value}
                       </span>
                     </div>
