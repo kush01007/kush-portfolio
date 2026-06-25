@@ -16,7 +16,7 @@ export const profile = {
   portrait: portfolioPortrait,
 
   shortIntro:
-    "B.Tech student who loves building clean, responsive and performant web applications with modern UI and real-world functionality. I enjoy turning ideas into seamless digital experiences.",
+    "I turn simple ideas into real, deployed web projects. From clean interfaces to practical full-stack features, I’m learning by building things that feel polished, perform smoothly, and solve real problems.",
 
   about:
     "I'm Kush, a B.Tech student and a passionate Full-Stack Web Developer who loves building clean, responsive and user-friendly web applications. I enjoy turning ideas into real-world digital experiences.",
@@ -25,8 +25,8 @@ export const profile = {
 
   email: "kushtech123@gmail.com",
   github: "https://github.com/kush01007",
-  linkedin: "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/",
-  resume: "",
+  linkedin: "https://www.linkedin.com/in/kush-gupta-b99a90395/",
+  resume: "/Kush_Gupta_Resume.pdf",
 };
 
 export const navLinks = [
@@ -44,7 +44,7 @@ export const socials = [
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/",
+    href: "https://www.linkedin.com/in/kush-gupta-b99a90395",
     icon: "Linkedin",
   },
   {
@@ -483,5 +483,5 @@ export const contact = {
     "I'm currently open to internship opportunities and beginner-friendly frontend/full-stack roles.",
   email: "kushtech123@gmail.com",
   github: "https://github.com/kush01007",
-  linkedin: "https://www.linkedin.com/in/kush-gupta-b99a90395/details/skills/",
+  linkedin: "https://www.linkedin.com/in/kush-gupta-b99a90395",
 };
